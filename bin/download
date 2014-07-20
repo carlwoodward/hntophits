@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby
+# vim:ft=ruby
+
+require 'net/http'
+
+=begin
+
+Exit status:
+
+0 success
+1 failure
+2 bad configuration.
+
+=end
+
+$SUCCESS = 0
+$FAILURE = 1
+$BAD_CONFIGURATION = 2
+
+module Download
+
+  def self.check_configuration
+    unless ENV.has_key?('HNHITDIR')
+      $stderr.puts "HNHITDIR not set"
+      exit $BAD_CONFIGURATION
+    end
+  end
+
+  def self.log_failure
+  end
+
+  def self.save_response(body)
+    p body
+  end
+
+  def self.download_ycombinator_front_page
+    response = Net::HTTP.get_response(URI('https://news.ycombinator.com'))
+    if response.is_a?(Net::HTTPSuccess)
+      save_response(response.body)
+      exit $SUCCESS
+    else
+      log_failure
+      exit $FAILURE
+    end
+  end
+
+end
+
+Download.check_configuration
+Download.download_ycombinator_front_page
