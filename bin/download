@@ -25,7 +25,7 @@ fi
 while true
 do
   outputfile="$HNDOWNLOADDIR/news.`date +%y%m%d%H%M`"       
-  wget https://news.ycombinator.com -O $outputfile -o $HNDOWNLOADDIR/output.log
+  wget https://news.ycombinator.com -O $outputfile -a $HNDOWNLOADDIR/output.log
   if [[ $? -ne 0 ]]
   then
     logger -t hntophits wget failed.
