@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# quick and dirty, just download some data.
+#
+
+if [[ -z $HNDOWNLOADDIR ]]
+then
+  echo 'HNDOWNLOADDIR not set' 1>&2
+  exit 1
+fi
+
+if [[ ! -d $HNDOWNLOADDIR ]]
+then
+  echo "Making HNDOWNLOADDIR "
+  mkdir $HNDOWNLOADDIR
+  if [[ ! -d $HNDOWNLOADDIR ]]
+  then
+    echo "failed to create HNDOWNLOADDIR"
+    exit 2
+  fi
+fi
+
+while true
+do
+  outputfile="$HNDOWNLOADDIR/news.`date +%y%m%d%H%M`"       
+  wget https://news.ycombinator.com -O $outputfile -o $HNDOWNLOADDIR/output.log
+  if [[ $? -ne 0 ]]
+  then
+    logger -t hntophits wget failed.
+  else
+    gzip -f $outputfile
+  fi
+  sleep 60
+done
