@@ -1,0 +1,24 @@
+
+* download the page from news.ycombinator.com
+  * failures: sleep for 15 seconds and then try again. Process is delayed here.
+* store the output in the a directory and long with the time of the download
+        (just put the time in the file name).
+  * failures: if storing output fails because the file system is full, log this
+    and try sending an email to the admin.
+    TODO: I would prefer to be able to queue the here and continue to download files.
+* process the file.
+  * remove newlines making the file one line long.
+  * process the file using regex for the data needed.
+* Update the database with the title, url, poster-name and the date of the download.
+
+# what happens if it's not possible to fork?
+loop: 
+  if (download the page) {
+    fork(dowloaded-page) {
+      if (save the page) {
+        fork(page-info) {
+          update the database.
+        }
+      }
+    }
+  }

@@ -2,6 +2,7 @@
 # vim:ft=ruby
 
 require 'net/http'
+require 'optparse'
 
 =begin
 
@@ -44,7 +45,21 @@ module Download
     end
   end
 
+  # Command line options;
+  # * -d  directory to store the downloaded html in. (mandatory)
+  # * -t time interval in seconds between downloading the hacker new main page.
+  def parse_options
+  end
+
+  def self.run(options) # hash
+    out_dir = options['-d']
+    wait_time = optins['-t']
+    loop do
+      download_ycombinator_front_page(outdir)
+      sleep wait_time
+    end
+  end
+
 end
 
-Download.check_configuration
-Download.download_ycombinator_front_page
+Download.run(Download.parse_options)
