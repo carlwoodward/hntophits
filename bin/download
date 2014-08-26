@@ -1,65 +1,103 @@
+#!/bin/bash
+
+trap '' 1
+
+# quick and dirty, just download some data.
+#
+
+if [[ -z $HNDOWNLOADDIR ]]
+then
+  echo 'HNDOWNLOADDIR not set' 1>&2
+  exit 1
+fi
+
+if [[ ! -d $HNDOWNLOADDIR ]]
+then
+  echo "Making HNDOWNLOADDIR "
+  mkdir $HNDOWNLOADDIR
+  if [[ ! -d $HNDOWNLOADDIR ]]
+  then
+    echo "failed to create HNDOWNLOADDIR"
+    exit 2
+  fi
+fi
+
+while true
+do
+  outputfile="$HNDOWNLOADDIR/news.`date +%y%m%d%H%M`"       
+  wget https://news.ycombinator.com -O $outputfile -a $HNDOWNLOADDIR/output.log
+  if [[ $? -ne 0 ]]
+  then
+    logger -t hntophits wget failed.
+  else
+    gzip -f $outputfile
+  fi
+  sleep 60
+done
+
+# -- ruby version here for later.
 #!/usr/bin/env ruby
 # vim:ft=ruby
-
-require 'net/http'
-require 'optparse'
-
-=begin
-
-Exit status:
-
-0 success
-1 failure
-2 bad configuration.
-
-=end
-
-$SUCCESS = 0
-$FAILURE = 1
-$BAD_CONFIGURATION = 2
-
-module Download
-
-  def self.check_configuration
-    unless ENV.has_key?('HNHITDIR')
-      $stderr.puts "HNHITDIR not set"
-      exit $BAD_CONFIGURATION
-    end
-  end
-
-  def self.log_failure
-  end
-
-  def self.save_response(body)
-    p body
-  end
-
-  def self.download_ycombinator_front_page
-    response = Net::HTTP.get_response(URI('https://news.ycombinator.com'))
-    if response.is_a?(Net::HTTPSuccess)
-      save_response(response.body)
-      exit $SUCCESS
-    else
-      log_failure
-      exit $FAILURE
-    end
-  end
-
-  # Command line options;
-  # * -d  directory to store the downloaded html in. (mandatory)
-  # * -t time interval in seconds between downloading the hacker new main page.
-  def parse_options
-  end
-
-  def self.run(options) # hash
-    out_dir = options['-d']
-    wait_time = optins['-t']
-    loop do
-      download_ycombinator_front_page(outdir)
-      sleep wait_time
-    end
-  end
-
-end
-
-Download.run(Download.parse_options)
+#
+#require 'net/http'
+#require 'optparse'
+#
+#=begin
+#
+#Exit status:
+#
+#0 success
+#1 failure
+#2 bad configuration.
+#
+#=end
+#
+#$SUCCESS = 0
+#$FAILURE = 1
+#$BAD_CONFIGURATION = 2
+#
+#module Download
+#
+#  def self.check_configuration
+#    unless ENV.has_key?('HNHITDIR')
+#      $stderr.puts "HNHITDIR not set"
+#      exit $BAD_CONFIGURATION
+#    end
+#  end
+#
+#  def self.log_failure
+#  end
+#
+#  def self.save_response(body)
+#    p body
+#  end
+#
+#  def self.download_ycombinator_front_page
+#    response = Net::HTTP.get_response(URI('https://news.ycombinator.com'))
+#    if response.is_a?(Net::HTTPSuccess)
+#      save_response(response.body)
+#      exit $SUCCESS
+#    else
+#      log_failure
+#      exit $FAILURE
+#    end
+#  end
+#
+#  # Command line options;
+#  # * -d  directory to store the downloaded html in. (mandatory)
+#  # * -t time interval in seconds between downloading the hacker new main page.
+#  def parse_options
+#  end
+#
+#  def self.run(options) # hash
+#    out_dir = options['-d']
+#    wait_time = optins['-t']
+#    loop do
+#      download_ycombinator_front_page(outdir)
+#      sleep wait_time
+#    end
+#  end
+#
+#end
+#
+#Download.run(Download.parse_options)
