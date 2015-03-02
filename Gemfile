@@ -39,4 +39,4 @@ gem 'spring',        group: :development
 # gem 'debugger', group: [:development, :test]
 
 # local
-gem 'nokogirl'
+gem 'nokogiri'
