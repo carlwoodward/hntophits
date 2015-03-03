@@ -11,6 +11,7 @@ module LoadDB
 
   # If the filename starts with 'news.' and next has a valid date 'YYMMDDMMMM'
   def self.valid_name filename
+    filename = File.basename(filename)
     fields = filename.split(/./)
     return false unless fields.length > 2
     filename =~ /^news\./ && fields[1] =~ /\d{10}/

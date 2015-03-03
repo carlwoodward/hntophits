@@ -15,13 +15,13 @@ end
 
 describe 'LoadDB.valid_name' do
   it 'should be invalid because of missing prefix' do
-    expect(LoadDB.valid_name('missing.1234567890')).to_not be true
+    expect(LoadDB.valid_name(Fixtures_directory + '/missing.1234567890')).to_not be true
   end
   it 'should be invalid because of missing/invalid date' do
-    expect(LoadDB.valid_name('news.150303222')).to_not be true
+    expect(LoadDB.valid_name(Fixtures_directory + '/news.150303222')).to_not be true
   end
   it 'should be invalid because of too many fields' do
-    expect(LoadDB.valid_name('news.0123456789.gz.gz')).to_not be true
+    expect(LoadDB.valid_name(Fixtures_directory + '/news.0123456789.gz.gz')).to_not be true
   end
 end
 
