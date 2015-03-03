@@ -9,7 +9,16 @@ module LoadDB
 
   # If the filename starts with 'news.' and next has a valid date 'YYMMDDMMMM'
   def self.valid_name filename
-    filename =~ /^news\./ && filename.split(/./)[1] =~ /\d{10}/
+    fields = filename.split(/./)
+    return false unless fields.length > 2
+    filename =~ /^news\./ && fields[1] =~ /\d{10}/
+  end
+
+  # Get the date that the file was created from the file name.
+  # Parse the date of the file and return it a string 'YYMMDDMMMM'
+  # Up to the user to run valid_name on the filename first.
+  def self.parse_date filename
+    filename.split(/\./)[1]
   end
 
   # If the filename ends with '.gz' open the file via gzip otherwise simply open the file.

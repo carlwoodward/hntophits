@@ -20,6 +20,17 @@ describe 'LoadDB.valid_name' do
   it 'should be invalid because of missing/invalid date' do
     expect(LoadDB.valid_name('news.150303222')).to_not be true
   end
+  it 'should be invalid because of too many fields' do
+    expect(LoadDB.valid_name('news.0123456789.gz.gz')).to_not be true
+  end
+end
+
+describe 'LoadDB.parse_date' do
+  it 'should return a date value' do
+    filename = 'news.1503030111.gz'
+    expect(LoadDB.parse_date(filename)).to eq '1503030111'
+  end
+  # LoadDB.parse_date doesn't make any guarentees about processing the date for the caller.
 end
 
 describe 'LoadDB.openfile' do
