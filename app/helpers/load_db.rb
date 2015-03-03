@@ -1,4 +1,6 @@
 
+require 'nokogiri'
+
 module LoadDB
 
   # Given a directory name, return an Enumerator that will return each
@@ -24,9 +26,18 @@ module LoadDB
   # If the filename ends with '.gz' open the file via gzip otherwise simply open the file.
   def self.openfile filename
     if filename =~ /\.gz$/
-      IO.popen("gunzip < #{filename}")
+      io = IO.popen("gunzip < #{filename}")
     else
-      open(filename)
+      io = open(filename)
+    end
+    if block_given?
+      begin
+        yield io
+      ensure
+        io.close
+      end
+    else
+      io
     end
   end
 

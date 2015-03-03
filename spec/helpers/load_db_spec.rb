@@ -43,4 +43,18 @@ describe 'LoadDB.openfile' do
     expect(io.readline).to eq "one\n"
     expect(io.readline).to eq "two\n"
   end
+
+  it 'should call the block with the io object when given a compressed file' do
+    LoadDB.openfile(Fixtures_directory + '/dummy.txt') do |io|
+      first_line = io.readline
+      expect(first_line).to eq "one\n"
+    end
+  end
+
+  it 'should call the block with the io object when given regular file' do
+    LoadDB.openfile(Fixtures_directory + '/dummy.txt.gz') do |io|
+      expect(io.readline).to eq "one\n"
+      expect(io.readline).to eq "two\n"
+    end
+  end
 end
