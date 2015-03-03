@@ -40,3 +40,7 @@ gem 'spring',        group: :development
 
 # local
 gem 'nokogiri'
+
+group :development, :test do
+    gem 'rspec-rails', '~> 3.0'
+end
