@@ -42,9 +42,30 @@ module LoadDB
     end
   end
 
-  # Load and parse the file into the database here.
-  def load(dir)
-    files(dir).each do |file|
+  def self.update_db(date, href, description)
+    Story.new_top_hit(date, href, description)
+  end
+
+  # :nodoc:
+  # Comment on the long logic expression by method name rather than a comment.
+  def self.element_has_one_child_and_href_begins_with_http elem
+    elem.children && elem.children.length == 1 && elem['href'] && elem['href'] =~ /^http/
+  end
+
+  # Load the html from https://news.ycombinator.com, parse it and update the database.
+  def self.load(dir)
+    files(dir).each do |filename|
+      if (valid_name(filename)) && (date = parse_date(filename))
+        openfile(filename) do |io|
+          elem = Nokogiri::HTML(io).css('tr > td.title > a').find do |elem|
+            element_has_one_child_and_href_begins_with_http elem
+          end
+          # update with the date from the file, the href and the text description
+          update_db(date, elem['href'], elem.children[0].content)
+        end
+      else
+        puts "skipping #{filename}: invalid file name"
+      end
     end
   end
 

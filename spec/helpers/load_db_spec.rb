@@ -64,3 +64,24 @@ describe 'LoadDB.openfile' do
     end
   end
 end
+
+describe 'LoadDB.load' do
+  it 'will test that update_db receives all of the correct values' do
+    # it would be better to have more varied range of values here.
+    expect(LoadDB).to receive(:update_db).with("1503031100", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    expect(LoadDB).to receive(:update_db).with("1503031101", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    expect(LoadDB).to receive(:update_db).with("1503031102", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    expect(LoadDB).to receive(:update_db).with("1503031103", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    expect(LoadDB).to receive(:update_db).with("1503031104", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    expect(LoadDB).to receive(:update_db).with("1503031105", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    expect(LoadDB).to receive(:update_db).with("1503031106", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    expect(LoadDB).to receive(:update_db).with("1503031107", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    expect(LoadDB).to receive(:update_db).with("1503031108", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    expect(LoadDB).to receive(:update_db).with("1503031109", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    expect(LoadDB).to receive(:update_db).with("1503031110", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    expect(LoadDB).to receive(:update_db).with("1503031111", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    expect(LoadDB).to receive(:update_db).with("1503031112", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    expect(LoadDB).to receive(:update_db).with("1503031113", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
+    LoadDB.load(Fixtures_directory)
+  end
+end
