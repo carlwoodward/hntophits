@@ -9,7 +9,7 @@ describe 'LoadDB.files' do
     expect(Dir.exists?(Fixtures_directory)).to be true 
   end
   it 'should return a list of files matching news.*gz' do
-    expect(LoadDB.files(Fixtures_directory).first).to eq Fixtures_directory + '/news.1503031100.gz'
+    expect(LoadDB.files(Fixtures_directory).first).to eq Fixtures_directory + '/news.1410150938.gz'
   end
 end
 
@@ -68,6 +68,15 @@ end
 describe 'LoadDB.load' do
   it 'will test that update_db receives all of the correct values' do
     # it would be better to have more varied range of values here.
+    expect(LoadDB).to receive(:update_db).with("1410150938", "https://www.humblebundle.com/", "Humble Mozilla Bundle")
+    expect(LoadDB).to receive(:update_db).with("1410150939", "https://www.humblebundle.com/", "Humble Mozilla Bundle")
+    expect(LoadDB).to receive(:update_db).with("1410150940", "https://www.humblebundle.com/", "Humble Mozilla Bundle")
+    expect(LoadDB).to receive(:update_db).with("1410150941", "https://www.humblebundle.com/", "Humble Mozilla Bundle")
+    expect(LoadDB).to receive(:update_db).with("1410150942", "https://www.humblebundle.com/", "Humble Mozilla Bundle")
+    expect(LoadDB).to receive(:update_db).with("1410150943", "http://googleonlinesecurity.blogspot.com/2014/10/this-poodle-bites-exploiting-ssl-30.html", "This POODLE bites: exploiting the SSL 3.0 fallback")
+    expect(LoadDB).to receive(:update_db).with("1410150944", "http://googleonlinesecurity.blogspot.com/2014/10/this-poodle-bites-exploiting-ssl-30.html", "This POODLE bites: exploiting the SSL 3.0 fallback")
+    expect(LoadDB).to receive(:update_db).with("1410150945", "http://googleonlinesecurity.blogspot.com/2014/10/this-poodle-bites-exploiting-ssl-30.html", "This POODLE bites: exploiting the SSL 3.0 fallback")
+    expect(LoadDB).to receive(:update_db).with("1410150946", "http://googleonlinesecurity.blogspot.com/2014/10/this-poodle-bites-exploiting-ssl-30.html", "This POODLE bites: exploiting the SSL 3.0 fallback")
     expect(LoadDB).to receive(:update_db).with("1503031100", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
     expect(LoadDB).to receive(:update_db).with("1503031101", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
     expect(LoadDB).to receive(:update_db).with("1503031102", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
