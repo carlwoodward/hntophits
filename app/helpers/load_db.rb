@@ -42,8 +42,12 @@ module LoadDB
     end
   end
 
-  def self.update_db(date, href, description)
-    Story.new_top_hit(date, href, description)
+  def self.valid_hn_id elem
+    elem =~ /^\d+$/ ? true : false
+  end
+
+  def self.update_db(hn_id, date, href, description)
+    Story.new_top_hit(hn_id, date, href, description)
   end
 
   # :nodoc:
@@ -57,11 +61,20 @@ module LoadDB
     files(dir).each do |filename|
       if (valid_name(filename)) && (date = parse_date(filename))
         openfile(filename) do |io|
-          elem = Nokogiri::HTML(io).css('tr > td.title > a').find do |elem|
+          lines = io.readlines.join
+          elem = Nokogiri::HTML(lines).css('tr > td.title > a').find do |elem|
             element_has_one_child_and_href_begins_with_http elem
           end
-          # update with the date from the file, the href and the text description
-          update_db(date, elem['href'], elem.children[0].content)
+          if elem
+            # TODO can the following parent.parent.... line be cleaned up?
+            id_elem = elem.parent.parent.children[1].child.child['id'].sub('up_', '')
+            if valid_hn_id(id_elem)
+              # update with the HN id, date from the file, the href and the text description
+              update_db(id_elem, date, elem['href'], elem.children[0].content)
+            else
+              warn "bad hn_id in filename #{filename}"
+            end
+          end
         end
       else
         puts "skipping #{filename}: invalid file name"
