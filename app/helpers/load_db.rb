@@ -43,7 +43,7 @@ module LoadDB
   end
 
   def self.valid_hn_id elem
-    elem =~ /^\d+$/ ? true : false
+    String(elem) =~ /^\d+$/ ? true : false
   end
 
   def self.update_db(hn_id, date, href, description)
