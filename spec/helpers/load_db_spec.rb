@@ -43,7 +43,6 @@ describe 'LoadDB.valid_hn_id' do
   it 'should not be valid' do
     expect(LoadDB.valid_hn_id("fred")).to be false
     expect(LoadDB.valid_hn_id("")).to be false
-    expect(LoadDB.valid_hn_id("0")).to be false
   end
 end
 
