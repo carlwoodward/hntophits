@@ -1,5 +1,5 @@
 
-require 'load_db'
+require "#{Dir.pwd}/app/lib/load_db"
 
 Fixtures_directory = File.expand_path('test/fixture/load_html/downloads')
 
