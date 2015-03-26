@@ -44,4 +44,5 @@ gem 'pg'
 
 group :development, :test do
     gem 'rspec-rails', '~> 3.2'
+    gem 'factory_girl_rails', '~> 4'
 end
