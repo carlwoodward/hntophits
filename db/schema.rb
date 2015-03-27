@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150304233938) do
+ActiveRecord::Schema.define(version: 20150327204351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,5 +25,12 @@ ActiveRecord::Schema.define(version: 20150304233938) do
   end
 
   add_index "stories", ["hn_id"], name: "index_stories_on_hn_id", using: :btree
+
+  create_table "top_hits", force: true do |t|
+    t.integer  "story_id"
+    t.date     "date_seen"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
