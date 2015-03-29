@@ -1,5 +1,6 @@
 
 require 'nokogiri'
+require "#{Dir.pwd}/app/lib/hn"
 
 module LoadDB
 
@@ -42,10 +43,6 @@ module LoadDB
     end
   end
 
-  def self.valid_hn_id elem
-    String(elem) =~ /^\d+$/ ? true : false
-  end
-
   def self.update_db(hn_id, date, href, description)
     Story.new_top_hit(hn_id, date, href, description)
   end
@@ -68,7 +65,7 @@ module LoadDB
           if elem
             # TODO can the following parent.parent.... line be cleaned up?
             id_elem = elem.parent.parent.children[1].child.child['id'].sub('up_', '')
-            if valid_hn_id(id_elem)
+            if HN.valid_hn_id(id_elem)
               # update with the HN id, date from the file, the href and the text description
               update_db(id_elem, date, elem['href'], elem.children[0].content)
             else
