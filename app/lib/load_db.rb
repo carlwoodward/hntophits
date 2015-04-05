@@ -1,6 +1,5 @@
 
 require 'nokogiri'
-require "#{Dir.pwd}/app/lib/hn"
 
 module LoadDB
 

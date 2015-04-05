@@ -1,7 +1,7 @@
 
-require "#{Dir.pwd}/app/lib/hn"
+require 'rails_helper'
 
-RSpec.describe HN do
+RSpec.describe HN, type: :model do
   describe 'HN.valid_hn_id' do
     it 'should be valid' do
       expect(HN.valid_hn_id(1)).to be true
@@ -16,5 +16,4 @@ RSpec.describe HN do
       expect(HN.valid_hn_id("")).to be false
     end
   end
-
 end
