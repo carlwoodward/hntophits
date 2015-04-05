@@ -77,10 +77,11 @@ module LoadDB
             # TODO can the following parent.parent.... line be cleaned up?
             id_elem = elem.parent.parent.children[1].child.child['id'].sub('up_', '')
             if HN.valid_hn_id(id_elem)
+              puts "updating #{filename}"
               # update with the HN id, date from the file, the href and the text description
               update_db(id_elem, date, elem['href'], elem.children[0].content)
             else
-              warn "bad hn_id in filename #{filename}"
+              puts "bad hn_id in filename #{filename}"
             end
           end
         end
