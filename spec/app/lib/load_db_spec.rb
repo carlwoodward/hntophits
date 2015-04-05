@@ -36,6 +36,10 @@ RSpec.describe LoadDB do
       filename = 'news.1503030111.gz'
       expect(LoadDB.parse_date(filename)).to eq '1503030111'
     end
+    it "should fail because there is a lot more paths in the file name" do
+      filename = './test/fixture/load_html/downloads/news.1410150938.gz'
+      expect(LoadDB.parse_date(filename)).to eq '1410150938'
+    end
     # LoadDB.parse_date doesn't make any guarentees about processing the date for the caller.
   end
 

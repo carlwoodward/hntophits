@@ -21,7 +21,7 @@ module LoadDB
   # Parse the date of the file and return it a string 'YYMMDDMMMM'
   # Up to the user to run valid_name on the filename first.
   def self.parse_date filename
-    filename.split(/\./)[1]
+    File.basename(filename).split(/\./)[1]
   end
 
   # If the filename ends with '.gz' open the file via gzip otherwise simply open the file.
