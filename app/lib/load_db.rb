@@ -55,7 +55,7 @@ module LoadDB
   end
 
   def self.update_db(hn_id, date, href, description)
-    HN.process_latest_hn_num_one(hn_id: hn_id, date: date, href: href, description: description)
+    HN.process_latest_hn_num_one(hn_id: hn_id, date: make_time(date), href: href, description: description)
   end
 
   # :nodoc:
