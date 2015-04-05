@@ -42,6 +42,18 @@ module LoadDB
     end
   end
 
+  # Make time
+  #
+  # The date used by the script to wget the contents of the hacker news site, is
+  # YYMMDDmmss, which needs to be massaged into a format suitable for calling
+  # Time.new
+  # Return the a Time.new object made from the date.
+  #
+  def self.make_time(date)
+    year, month, date, hour, minute, second = *date.scan(/../), 0
+    Time.new(2000 + year.to_i, month, date, hour, minute, second)
+  end
+
   def self.update_db(hn_id, date, href, description)
     HN.process_latest_hn_num_one(hn_id: hn_id, date: date, href: href, description: description)
   end

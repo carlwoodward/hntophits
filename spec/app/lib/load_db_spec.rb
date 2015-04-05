@@ -94,4 +94,12 @@ RSpec.describe LoadDB do
       LoadDB.load(Fixtures_directory)
     end
   end
+  describe "LoadDB.make_time" do
+    it "simple date conversion" do
+      expect(LoadDB.make_time('1410120834')).to eq Time.new(2014, 10, 12, 8, 34, 0)
+    end
+    it "should probably explode" do
+      expect { LoadDB.make_time('1410120899') }.to raise_exception
+    end
+  end
 end
