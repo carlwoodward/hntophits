@@ -6,7 +6,7 @@ RSpec.describe TopHit, type: :model do
       story = create(:story)
       create(:top_hit, date_seen: Time.now, story: story)
       top_hit = create(:top_hit, date_seen: Time.now + 1.minute, story: story)
-      expect(TopHit.top_hit).to eq top_hit
+      expect(TopHit.current_top_hit).to eq top_hit
     end
   end
 end

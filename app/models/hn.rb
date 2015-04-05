@@ -6,11 +6,8 @@ class HN
   end
 
   def self.process_latest_hn_num_one(hn_id:, date:, href:, description:)
-    if story = Story.add_new_story(hn_id: hn_id, href: href, description: description)
-      TopHit.add(story_id: story.id, date: date)
-    else
-      Story.add_more_time(hn_id: hn_id)
-    end
+    story = Story.autovivify(hn_id: hn_id, date: date, href: href, description: description)
+    TopHit.deal_with_top_hit(story_id: story.id, date: date)
   end
 
 end
