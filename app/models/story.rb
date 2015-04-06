@@ -6,6 +6,7 @@ class Story < ActiveRecord::Base
   validates :time_at_num_one, numericality: { only_integer: true }
   validates :href, presence: true
   validates :description, presence: true
+  validates_uniqueness_of :hn_id
 
   def self.autovivify(hn_id:, date:, href:, description:)
     story = Story.find_by(hn_id: hn_id)
