@@ -6,7 +6,7 @@ module LoadDB
   # Given a directory name, return an Enumerator that will return each
   # file to be processes in time order (oldest first).
   def self.files(dir)
-    Dir.glob("#{dir}/news.*gz").lazy.to_enum
+    Dir.glob("#{dir}/news.*.gz").map {|f| File.basename(f).split('.')[1] }.sort {|a, b| a <=> b}.map {|f| "#{dir}/news.#{f}.gz" }
   end
 
   # If the filename starts with 'news.' and next has a valid date 'YYMMDDMMMM'
