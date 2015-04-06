@@ -1,6 +1,9 @@
 class TopHit < ActiveRecord::Base
   belongs_to :story
 
+  validates :date_seen, presence: true
+  validates :story_id, numericality: { integer_only: true } 
+
   scope :current_top_hit, -> { order(date_seen: :desc).limit(1).first }
 
   def self.new_story_at_top(story_id)

@@ -2,6 +2,11 @@ class Story < ActiveRecord::Base
 
   has_many :top_hits
 
+  validates :hn_id, numericality: { only_integer: true }
+  validates :time_at_num_one, numericality: { only_integer: true }
+  validates :href, presence: true
+  validates :description, presence: true
+
   def self.autovivify(hn_id:, date:, href:, description:)
     story = Story.find_by(hn_id: hn_id)
     if story
