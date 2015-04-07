@@ -32,6 +32,16 @@ describe HNCollect do
       expect(HNCollect).to receive(:get_story).with(top_hit)
       HNCollect.get_top_hit_details(top_hit)
     end
+    it "should exercise the return value of last_top_story" do
+      top_hit = 121
+      description = 'foobar'
+      href = 'http://www.blah.com.au'
+      HNCollect.update_cache(top_hit, description, href)
+      rhn_id, rdescription, rhref = HNCollect.get_top_hit_details(top_hit)
+      expect(rhn_id).to eq top_hit
+      expect(rdescription).to eq description
+      expect(rhref).to eq href
+    end
   end
 
   context "adjusted_delay" do
