@@ -1,0 +1,17 @@
+
+.container
+  .row
+    .col-xs-12
+      %h1 Recent #1
+      %ol(class="list-style")
+        - @top_hits.each_with_index do |tophit, i|
+          %li
+            %a(href="#{tophit.href}") #{tophit.description}
+  .row
+    .col-xs-10
+      %h1 TopHits
+      %ol(class="list-style")
+        - @stories.each do |story|
+          %li
+            = "#{story.time_at_num_one} min"
+            %a(href="#{story.href}") #{story.description}

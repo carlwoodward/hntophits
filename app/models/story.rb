@@ -19,4 +19,8 @@ class Story < ActiveRecord::Base
     story
   end
 
+  def self.get_ordered_num_one_stories
+    Story.order(time_at_num_one: :desc).limit(10)
+  end
+
 end
