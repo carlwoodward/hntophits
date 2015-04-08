@@ -41,7 +41,7 @@ module HNCollect
   end
 
   def get_top_hit
-    https_get '/v0/topstories.json'
+    https_get('/v0/topstories.json').first
   end
 
   def get_story hn_id
@@ -78,7 +78,7 @@ module HNCollect
 
   def run
     run_every_minute do
-      top_hit = get_top_hit.first
+      top_hit = get_top_hit
       hn_id, description, href = get_top_hit_details(top_hit)
       puts "#{Time.now}: #{hn_id}"
       HN.process_latest_hn_num_one(hn_id: hn_id, description: description, href: href, date: Time.now)
