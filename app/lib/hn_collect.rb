@@ -69,18 +69,23 @@ module HNCollect
 
   def run_every_minute
     loop do
-      start_time = Time.now
-      yield
-      end_time = Time.now
-      sleep adjusted_delay(end_time, start_time)
+      begin
+        start_time = Time.now
+        yield
+        end_time = Time.now
+        sleep adjusted_delay(end_time, start_time)
+      rescue => e
+        puts e.messages
+      end
     end
   end
 
   def run
     run_every_minute do
+      time = Time.now
       top_hit = get_top_hit
       hn_id, description, href = get_top_hit_details(top_hit)
-      puts "#{Time.now}: #{hn_id}"
+      puts "#{time}: #{hn_id} '#{description}' '#{href}'"
       HN.process_latest_hn_num_one(hn_id: hn_id, description: description, href: href, date: Time.now)
     end
   end
