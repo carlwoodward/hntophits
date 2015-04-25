@@ -14,5 +14,18 @@
  *= require_self
  */
 
-@import "bootstrap-sprockets"
-@import "bootstrap"
+@import "variables";
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+.jumbotron {
+  font-family: Verdana, Geneva, sans-serif;
+  padding-top: 9px;
+  padding-bottom: 12px;
+  margin-top: 30px;
+  h1 { 
+    letter-spacing: -4px;
+    margin: 5px;
+    font-weight: 900;
+  }
+}

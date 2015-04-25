@@ -1,17 +1,19 @@
 
 .container
+  .jumbotron.text-center
+    %h1 Hacker News Top Hits
   .row
-    .col-xs-12
-      %h1 Recent #1
-      %ol(class="list-style")
+    .col-md-6
+      .stories
+        %h2 Recent Top Hits
         - @top_hits.each_with_index do |tophit, i|
-          %li
+          %p
             %a(href="#{tophit.href}") #{tophit.description}
-  .row
-    .col-xs-10
-      %h1 TopHits
-      %ol(class="list-style")
+    .col-md-6
+      .stories
+        %h2 Longest Loved Top Hits
         - @stories.each do |story|
-          %li
-            = "#{story.time_at_num_one} min"
+          %p.story-time
+            %span
+              = "#{story.time_at_num_one} min"
             %a(href="#{story.href}") #{story.description}
