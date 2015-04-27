@@ -80,13 +80,20 @@ module HNCollect
     end
   end
 
+  def at_the_beginning_of_the_next_minute
+    Kernel.sleep(60-Time.now.sec)
+    yield
+  end
+
   def run
-    run_every_minute do
-      time = Time.now
-      top_hit = get_top_hit
-      hn_id, description, href = get_top_hit_details(top_hit)
-      puts "#{time}: #{hn_id} '#{description}' '#{href}'"
-      HN.process_latest_hn_num_one(hn_id: hn_id, description: description, href: href, date: Time.now)
+    at_the_beginning_of_the_next_minute do
+      run_every_minute do
+        time = Time.now
+        top_hit = get_top_hit
+        hn_id, description, href = get_top_hit_details(top_hit)
+        puts "#{time}: #{hn_id} '#{description}' '#{href}'"
+        HN.process_latest_hn_num_one(hn_id: hn_id, description: description, href: href, date: Time.now)
+      end
     end
   end
 end
