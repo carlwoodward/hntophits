@@ -28,7 +28,7 @@ class TopHit < ActiveRecord::Base
   end
 
   def self.get_recent_top_hits
-    recent_top_hits = TopHit.select(:story_id).order(date_seen: :desc).limit(10)
+    recent_top_hits = TopHit.select(:story_id).order(date_seen: :asc).limit(10)
     Story.where(id: [recent_top_hits.map {|tophit| tophit.story_id}])
   end
 
