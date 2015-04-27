@@ -23,5 +23,7 @@ test:
   database: db/test.sqlite3
 
 production:
-  <<: *default
-  database: db/production.sqlite3
+  adapter: postgresql
+  user: hnprod
+  password: ENV["HNTOPHITS_DB_PASSWORD"]
+  database: hnprod
