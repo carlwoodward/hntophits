@@ -6,14 +6,18 @@
     .col-md-6
       .stories
         %h2 Recent Top Hits
-        - @top_hits.each_with_index do |tophit, i|
-          %p
-            %a(href="#{tophit.href}") #{tophit.description}
+        %table.table.table-condensed
+          - @top_hits.each_with_index do |tophit, i|
+            %tr
+              %td
+                %a(href="#{tophit.href}") #{tophit.description}
     .col-md-6
       .stories
         %h2 Longest Loved Top Hits
-        - @stories.each do |story|
-          %p.story-time
-            %span
-              = "#{story.time_at_num_one} min"
-            %a(href="#{story.href}") #{story.description}
+        %table.table.table-condensed
+          - @stories.each do |story|
+            %tr
+              %td.story-time
+                = minutes_to_words(story.time_at_num_one)
+              %td
+                %a(href="#{story.href}") #{story.description}

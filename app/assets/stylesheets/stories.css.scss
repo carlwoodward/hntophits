@@ -10,7 +10,7 @@
   border-radius: 6px;
   h2 {
     margin: 0;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     font-weight: 900;
   }
   p {
@@ -22,13 +22,8 @@
   }
 }
 
-.story-time {
-  span {
-    font-size: 0.8em;
-    color: brown;
-  }
-  a {
-    padding-left: 6px;
-  }
+td .story-time {
+  padding-top: 8px;
+  font-size: 0.8em;
+  color: brown;
 }
-
