@@ -1,6 +1,6 @@
 # vim ft=ruby
 
-desc "Load the dev database from the files in the fixtures directory"
+desc "Remove entries from tables in dev"
 namespace :hn do
   task :clean_db => :environment do
     Story.delete_all
