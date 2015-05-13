@@ -17,19 +17,19 @@ RSpec.describe LoadDB do
 
   describe 'LoadDB.valid_name' do
     it 'should be invalid because of missing prefix' do
-      expect(LoadDB.valid_name(Fixtures_directory + '/missing.1234567890')).to_not be true
+      expect{LoadDB.valid_name(Fixtures_directory + '/missing.1234567890')}.to raise_exception(HackerNews::InvalidFileName)
     end
     it 'should be invalid because of missing/invalid date' do
-      expect(LoadDB.valid_name(Fixtures_directory + '/news.150303222')).to_not be true
+      expect{LoadDB.valid_name(Fixtures_directory + '/news.150303222')}.to raise_exception(HackerNews::InvalidFileName)
     end
     it "should be valid because date is valid and there are enough fields and the date is valid" do
-      expect(LoadDB.valid_name(Fixtures_directory + '/news.0123456789')).to be true
+      expect(LoadDB.valid_name(Fixtures_directory + '/news.0123456789')).to be(true)
     end
     it "should be valid because it's ok to have 3 fields and the date is valid" do
-      expect(LoadDB.valid_name(Fixtures_directory + '/news.0123456789.gz')).to be true
+      expect(LoadDB.valid_name(Fixtures_directory + '/news.0123456789.gz')).to be(true)
     end
     it 'should be invalid because of too many fields' do
-      expect(LoadDB.valid_name(Fixtures_directory + '/news.0123456789.gz.gz')).to_not be true
+      expect{LoadDB.valid_name(Fixtures_directory + '/news.0123456789.gz.gz')}.to raise_exception(HackerNews::InvalidFileName)
     end
   end
 

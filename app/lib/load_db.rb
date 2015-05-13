@@ -13,7 +13,7 @@ module LoadDB
   def self.valid_name filename
     filename = File.basename(filename)
     fields = filename.split(/\./)
-    return false unless (fields.length == 2 or fields.length == 3)
+    raise HackerNews::InvalidFileName unless (fields.length == 2 or fields.length == 3)
     filename =~ /^news\./ && fields[1] =~ /^\d{10}$/ ? true : false
   end
 
@@ -64,31 +64,53 @@ module LoadDB
     elem.children && elem.children.length == 1 && elem['href'] && elem['href'] =~ /^http/
   end
 
+  def self.open_and_read_file(filename)
+    lines = []
+    raise HackerNews::InvalidFileName unless valid_name(filename)
+    openfile(filename) do |io|
+      lines = io.readlines.join
+    end
+    if lines.empty? # gunzip failed / nothing to process
+      raise HackerNews::NothingToRead, "file '#{filename}' contained no data"
+    else
+      yield lines
+    end
+  end
+
+  def self.process_html_from_hacker_news(lines)
+    elem = Nokogiri::HTML(lines).css('tr > td.title > a').find do |elem|
+      element_has_one_child_and_href_begins_with_http elem
+    end
+    raise HackerNews::ElementNotFound unless elem
+    id_elem = elem.parent.parent.children[1].child.child['id'].sub('up_', '') # TODO clean this up.
+    raise HackerNews::BadHNId unless HN.valid_hn_id(id_elem)
+    return id_elem, elem['href'], elem.children[0].content
+  end
+
+  def self.mark_file_as_processed(filename)
+  end
+
   # Load the html from https://news.ycombinator.com, parse it and update the database.
   def self.load(dir)
     files(dir).each do |filename|
-      if (valid_name(filename)) && (date = parse_date(filename))
-        openfile(filename) do |io|
-          lines = io.readlines.join
-          elem = Nokogiri::HTML(lines).css('tr > td.title > a').find do |elem|
-            element_has_one_child_and_href_begins_with_http elem
-          end
-          if elem
-            # TODO can the following parent.parent.... line be cleaned up?
-            id_elem = elem.parent.parent.children[1].child.child['id'].sub('up_', '')
-            if HN.valid_hn_id(id_elem)
-              puts "updating #{filename}"
-              # update with the HN id, date from the file, the href and the text description
-              update_db(id_elem, date, elem['href'], elem.children[0].content)
-            else
-              puts "bad hn_id in filename #{filename}"
-            end
-          end
-        end
-      else
-        puts "skipping #{filename}: invalid file name"
+      date = parse_date(filename)
+      open_and_read_file(filename) do |lines|
+        puts "processing #{filename}"
+        id_elem, href, desc = process_html_from_hacker_news(lines)
+        update_db(id_elem, date, href, desc)
+        mark_file_as_processed(filename)
       end
     end
+  rescue Errno::ENOENT => e
+    warn "Missing filename #{filename}: #{e.message}"
+  rescue HackerNews::ElementNotFound => e
+    warn "Bad HTML in file #{filename}: #{e.message}"
+  rescue HackerNews::BadHNId => e
+    warn "Bad Hacker News ID found in file #{filename}: #{e.message}"
+  rescue HackerNews::NothingToRead => e
+    warn "Empty input for file #{filename}: #{e.message}"
+  rescue HackerNews::InvalidFileName => e
+    warn "Bad file name for file #{filename}: #{e.message}"
   end
 
 end
