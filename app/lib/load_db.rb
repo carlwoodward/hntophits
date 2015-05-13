@@ -14,7 +14,11 @@ module LoadDB
     filename = File.basename(filename)
     fields = filename.split(/\./)
     raise HackerNews::InvalidFileName unless (fields.length == 2 or fields.length == 3)
-    filename =~ /^news\./ && fields[1] =~ /^\d{10}$/ ? true : false
+    if filename =~ /^news\./ && fields[1] =~ /^\d{10}$/
+      true
+    else
+      raise HackerNews::InvalidFileName
+    end
   end
 
   # Get the date that the file was created from the file name.
@@ -87,7 +91,13 @@ module LoadDB
     return id_elem, elem['href'], elem.children[0].content
   end
 
+  def self.make_processed_filename(dirname, basename)
+    File.join(dirname, 'O'+basename)
+  end
+
   def self.mark_file_as_processed(filename)
+    basename, dirname = File.basename(filename), File.dirname(filename)
+    FileUtils.move(filename, make_processed_filename(dirname, basename))
   end
 
   # Load the html from https://news.ycombinator.com, parse it and update the database.
