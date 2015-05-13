@@ -108,4 +108,28 @@ RSpec.describe LoadDB do
       expect { LoadDB.make_time('1410120899') }.to raise_exception
     end
   end
+
+  context "Test behaviour of file processing" do
+    it "should return a list containing a single file" do
+      Dir.mktmpdir do |dir|
+        date = '1501111201'
+        filename = "#{dir}/news.#{date}.gz"
+        FileUtils.touch filename
+        expect(LoadDB.valid_name(filename)).to be true
+        expect(LoadDB.parse_date(filename)).to eq date
+        files = LoadDB.files(dir)
+        expect(files.length).to eq 1
+        expect(files.first).to eq filename
+      end
+    end
+    it "when gunzip fails an empty list should be returned" do
+      Dir.mktmpdir do |dir|
+        date = '1501111201'
+        filename = "#{dir}/news.#{date}.gz"
+        FileUtils.touch filename
+        expect(LoadDB.openfile(filename).readlines).to eq []
+      end
+    end
+  end
+
 end
