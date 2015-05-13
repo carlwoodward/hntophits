@@ -27,7 +27,7 @@ module LoadDB
   # If the filename ends with '.gz' open the file via gzip otherwise simply open the file.
   def self.openfile filename
     if filename =~ /\.gz$/
-      io = IO.popen("gunzip < #{filename}")
+      io = IO.popen("gunzip < #{filename} 2>/dev/null")
     else
       io = open(filename)
     end
