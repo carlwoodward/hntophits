@@ -5,6 +5,13 @@ require_relative "../../rails_helper"
 
 Fixtures_directory = File.expand_path('test/fixture/load_html/downloads')
 
+def reset_fixtures_directory_contents(dirname)
+  Dir.chdir dirname
+  Dir.glob("Onews*") do |file|
+    FileUtils.move file, file.sub(/^O/, '')
+  end
+end
+
 RSpec.describe LoadDB do
   describe 'LoadDB.files' do
     it 'will check that the fixtures directory exists' do
@@ -71,6 +78,19 @@ RSpec.describe LoadDB do
     end
   end
 
+  describe 'LoadDB.mark_file_as_processed' do
+    it "should change the name of the file so that it won't be available for parsing" do
+      Dir.mktmpdir do |dir|
+        filename = 'news.2015010111'
+        fullpath = File.join(dir, filename)
+        FileUtils.touch fullpath
+        expect(File.exists? fullpath).to be true
+        LoadDB.mark_file_as_processed(fullpath)
+        expect(File.exists?(LoadDB.make_processed_filename(dir, filename))).to be true
+      end
+    end
+  end
+
   describe 'LoadDB.load' do
     it 'will test that update_db receives all of the correct values' do
       # it would be better to have more varied range of values here.
@@ -98,6 +118,7 @@ RSpec.describe LoadDB do
       expect(LoadDB).to receive(:update_db).with("9132815", "1503031112", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
       expect(LoadDB).to receive(:update_db).with("9132815", "1503031113", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
       LoadDB.load(Fixtures_directory)
+      reset_fixtures_directory_contents Fixtures_directory
     end
   end
   describe "LoadDB.make_time" do
