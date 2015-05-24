@@ -19,4 +19,23 @@ RSpec.describe TopHit, type: :model do
     expect(ordered_stories[1].id).to eq stories[2].id
     expect(ordered_stories[2].id).to eq stories[1].id
   end
+
+  context "to test deal_with_top_hit" do
+    it "should create a record in the database" do
+      expect(TopHit.count).to be 0
+      TopHit.deal_with_top_hit(story_id: 1, date: Time.now)
+      expect(TopHit.count).to be 1
+    end
+    it "should add new top hit" do
+      TopHit.deal_with_top_hit(story_id: 1, date: Time.now)
+      TopHit.deal_with_top_hit(story_id: 2, date: Time.now + 1.minute)
+      expect(TopHit.current_top_hit.story_id).to be 2
+    end
+    it "should not add a new top hit" do
+      TopHit.deal_with_top_hit(story_id: 1, date: Time.now)
+      TopHit.deal_with_top_hit(story_id: 1, date: Time.now + 1.minute)
+      expect(TopHit.current_top_hit.story_id).to be 1
+      expect(TopHit.count).to be 1
+    end
+  end
 end
