@@ -86,6 +86,8 @@ module HNCollect
   end
 
   def run
+    $stdout.sync = true
+    $stderr.sync = true
     at_the_beginning_of_the_next_minute do
       run_every_minute do
         time = Time.now
