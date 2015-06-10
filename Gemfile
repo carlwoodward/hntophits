@@ -55,3 +55,5 @@ end
 group :test do
   gem 'database_cleaner'
 end
+
+gem 'unicorn'
