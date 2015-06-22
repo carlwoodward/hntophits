@@ -111,6 +111,8 @@ module LoadDB
           update_db(id_elem, date, href, desc)
           mark_file_as_processed(filename)
         end
+      rescue NoMethodError => e
+        warn "Bad html tree in filename #{filename}"
       rescue Errno::ENOENT => e
         warn "Missing filename #{filename}: #{e.message}"
       rescue HackerNews::ElementNotFound => e
