@@ -103,24 +103,26 @@ module LoadDB
   # Load the html from https://news.ycombinator.com, parse it and update the database.
   def self.load(dir)
     files(dir).each do |filename|
-      date = parse_date(filename)
-      open_and_read_file(filename) do |lines|
-        puts "processing #{filename}"
-        id_elem, href, desc = process_html_from_hacker_news(lines)
-        update_db(id_elem, date, href, desc)
-        mark_file_as_processed(filename)
+      begin
+        date = parse_date(filename)
+        open_and_read_file(filename) do |lines|
+          puts "processing #{filename}"
+          id_elem, href, desc = process_html_from_hacker_news(lines)
+          update_db(id_elem, date, href, desc)
+          mark_file_as_processed(filename)
+        end
+      rescue Errno::ENOENT => e
+        warn "Missing filename #{filename}: #{e.message}"
+      rescue HackerNews::ElementNotFound => e
+        warn "Bad HTML in file #{filename}: #{e.message}"
+      rescue HackerNews::BadHNId => e
+        warn "Bad Hacker News ID found in file #{filename}: #{e.message}"
+      rescue HackerNews::NothingToRead => e
+        warn "Empty input for file #{filename}: #{e.message}"
+      rescue HackerNews::InvalidFileName => e
+        warn "Bad file name for file #{filename}: #{e.message}"
       end
     end
-  rescue Errno::ENOENT => e
-    warn "Missing filename #{filename}: #{e.message}"
-  rescue HackerNews::ElementNotFound => e
-    warn "Bad HTML in file #{filename}: #{e.message}"
-  rescue HackerNews::BadHNId => e
-    warn "Bad Hacker News ID found in file #{filename}: #{e.message}"
-  rescue HackerNews::NothingToRead => e
-    warn "Empty input for file #{filename}: #{e.message}"
-  rescue HackerNews::InvalidFileName => e
-    warn "Bad file name for file #{filename}: #{e.message}"
   end
 
 end
