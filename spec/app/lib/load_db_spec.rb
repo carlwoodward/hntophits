@@ -120,6 +120,21 @@ RSpec.describe LoadDB do
       LoadDB.load(Fixtures_directory)
       reset_fixtures_directory_contents Fixtures_directory
     end
+    it "will exercise the exception catching capabilities of LoadDB.load" do
+      date = '1503031113'
+      dir = Dir.mktmpdir
+      filename = "#{dir}/news.#{date}.gz"
+      FileUtils.touch filename
+      allow(LoadDB).to receive(:parse_date) { raise Errno::ENOENT }
+      tty = `tty`.chomp!
+      Tempfile.create('foobarstuff') do |tmpfile|
+        $stderr.reopen(tmpfile, "w")
+        LoadDB.load(dir)
+        $stderr.reopen(tty, "w")
+        tmpfile_contents = File.readlines(tmpfile)
+        expect(tmpfile_contents.first).to match /^Missing filename /
+      end
+    end
   end
   describe "LoadDB.make_time" do
     it "simple date conversion" do
@@ -127,6 +142,22 @@ RSpec.describe LoadDB do
     end
     it "should probably explode" do
       expect { LoadDB.make_time('1410120899') }.to raise_exception
+    end
+  end
+
+  describe "LoadDB.open_and_read_file" do
+    it "should throw and Errno::ENOENT when the file isn't compressed and it doesn't exist" do
+      expect { LoadDB.open_and_read_file('news.1501010101') }.to raise_exception(Errno::ENOENT)
+    end
+    # XXX this is wrong; if the file doesn't exist the same exception should be thrown irrespective of the file name.
+    it "should throw and HackerNews::NothingToRead when the file name ends with .gz but the file doesn't exist" do
+      expect { LoadDB.open_and_read_file('news.1501010101.gz') }.to raise_exception(HackerNews::NothingToRead)
+    end
+  end
+
+  describe "LoadDB.process_html_from_hacker_news" do
+    it "should throw an exception because the html wasn't able to to be parsed" do
+      expect{ LoadDB.process_html_from_hacker_news("a") }.to raise_exception(HackerNews::ElementNotFound)
     end
   end
 
