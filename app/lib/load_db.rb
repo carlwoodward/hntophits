@@ -91,6 +91,12 @@ module LoadDB
     return id_elem, elem['href'], elem.children[0].content
   end
 
+  def self.check_state_of_hacker_news_file(fullpath)
+    open_and_read_file(fullpath) do |lines|
+      id_elem, href, desc = process_html_from_hacker_news(lines)
+    end
+  end
+
   def self.make_processed_filename(dirname, basename)
     File.join(dirname, 'O'+basename)
   end
