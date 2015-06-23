@@ -28,7 +28,17 @@ class TopHit < ActiveRecord::Base
   end
 
   def self.get_recent_top_hits
-    recent_top_hits = TopHit.order(date_seen: :desc).limit(10).map(&:story)
+    recent_top_hits = []
+    stories = Hash.new(0)
+    # find ten unique stories in date order.
+    TopHit.order(date_seen: :desc).limit(22).each do |tophit|
+      story = tophit.story
+      next if stories.has_key? story.id
+      stories[story.id] += 1
+      recent_top_hits << story
+      break if stories.length > 10
+    end
+    recent_top_hits
   end
 
 end
