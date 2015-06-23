@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150623074117) do
+ActiveRecord::Schema.define(version: 20150623074652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "stories", force: true do |t|
     t.integer  "hn_id"
-    t.string   "href"
+    t.text     "href"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
