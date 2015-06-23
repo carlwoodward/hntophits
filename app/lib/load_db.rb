@@ -86,7 +86,16 @@ module LoadDB
       element_has_one_child_and_href_begins_with_http elem
     end
     raise HackerNews::ElementNotFound unless elem
-    id_elem = elem.parent.parent.children[1].child.child['id'].sub('up_', '') # TODO clean this up.
+    begin # the evils of using exceptions for flow control.
+      id_elem = elem.parent.parent.children[1].child.child['id'].sub('up_', '')
+    rescue NoMethodError
+      hacker_news_id_line = Nokogiri::HTML(lines).css('td > center > a')
+      id_elem = hacker_news_id_line.first.attributes['id'].value.sub('up_', '')
+      hacker_news_desc_line = Nokogiri::HTML(lines).css('td.title')
+      elem = hacker_news_desc_line[1].children.find do |child|
+        child.name == 'a'
+      end
+    end
     raise HackerNews::BadHNId unless HN.valid_hn_id(id_elem)
     return id_elem, elem['href'], elem.children[0].content
   end
