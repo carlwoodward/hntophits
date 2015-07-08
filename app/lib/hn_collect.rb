@@ -2,18 +2,29 @@
 
 require 'net/http'
 require 'net/https'
-
-# collect the data from the new HN api
-#
+require 'json'
 
 module HNCollect
-  extend self
+
+  class ServerUnavaiable < StandardError; end
 
   @cache = {
     hn_id: nil,
     description: nil,
     href: nil
   }
+
+  extend self
+
+  attr_accessor :HackerNewsURL
+  attr_accessor :HackerNewsPort
+
+  @HackerNewsURL = 'hacker-news.firebaseio.com'
+  @HackerNewsPort = 443
+
+  attr_accessor :ReadTimeOut
+
+  @ReadTimeOut = 60
 
   def story_cached?(hn_id)
     @cache[:hn_id] == hn_id ? true : false
@@ -34,9 +45,12 @@ module HNCollect
   end
 
   def https_get path
-    http = Net::HTTP.new('hacker-news.firebaseio.com', 443)
+    http = Net::HTTP.new(@HackerNewsURL, @HackerNewsPort)
     http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    http.read_timeout = @ReadTimeOut
     resp, data = http.get(path, nil)
+    raise HNCollect::ServerUnavaiable, resp if Integer(resp.code) != 200
     JSON.parse(resp.body)
   end
 
@@ -85,16 +99,25 @@ module HNCollect
     yield
   end
 
+  def load_data_from_hackernews
+    time = Time.now
+    top_hit = get_top_hit
+    hn_id, description, href = get_top_hit_details(top_hit)
+    puts "#{time}: #{hn_id} '#{description}' '#{href}'"
+    HN.process_latest_hn_num_one(hn_id: hn_id, description: description, href: href, date: Time.now)
+  rescue Net::ReadTimeout
+    HNTools.email "#{time}: timeout reading data - ignoring"
+  rescue Errno::ECONNREFUSED
+    HNTools.email "#{time}: connection refused to HackerNews"
+  rescue JSON::ParserError
+    HNTools.email "#{time}: bad JSON data returned"
+  end
+
   def run
-    $stdout.sync = true
-    $stderr.sync = true
+    $stdout.sync = $stderr.sync = true
     at_the_beginning_of_the_next_minute do
       run_every_minute do
-        time = Time.now
-        top_hit = get_top_hit
-        hn_id, description, href = get_top_hit_details(top_hit)
-        puts "#{time}: #{hn_id} '#{description}' '#{href}'"
-        HN.process_latest_hn_num_one(hn_id: hn_id, description: description, href: href, date: Time.now)
+        load_data_from_hackernews
       end
     end
   end
