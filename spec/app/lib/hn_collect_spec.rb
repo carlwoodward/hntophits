@@ -1,5 +1,93 @@
 
 require "#{Dir.pwd}/app/lib/hn_collect"
+require "#{Dir.pwd}/app/lib/hn_tools"
+
+require 'webrick'
+require 'webrick/https'
+require 'tempfile'
+
+class TestWebServer
+
+  attr_reader :pid, :cert_name, :logger
+
+  def initialize
+    @cert_name = [ %w[CN localhost] ]
+    @logger = WEBrick::Log.new(File.join(File.expand_path("~/tmp"), "hntophits-web-server-testing"))
+
+    @pid = fork
+    if not @pid # child
+      Process::setsid
+      Dir.chdir '/'
+      $stdin.close
+      $stdout.reopen('/dev/null', 'w+')
+      $stderr.reopen('/dev/null', 'w+')
+      server = WEBrick::HTTPServer.new(
+        :Port => 8080, :SSLEnable => true, :SSLCertName => @cert_name,
+        :Logger => @logger)
+
+      setup_mounts server
+      Signal.trap('TERM') { server.shutdown }
+      server.start
+      exit!
+    end
+    Signal.trap 'SIGCHLD', 'IGNORE'
+    give_web_server_time_to_start
+  end
+
+  def stop
+    if process_is_still_running
+      Process.kill('TERM', @pid)
+      while process_is_still_running
+        Kernel.sleep 0.6
+      end
+    end
+  end
+
+  def process_is_still_running
+    Process.kill(0, @pid)
+    return true
+  rescue Errno::ESRCH, Errno::EPERM, RangeError
+    return false
+  end
+
+  def give_web_server_time_to_start
+    Kernel.sleep 2
+  end
+end
+
+class GoodTopStoriesServer < TestWebServer
+  def setup_mounts server
+    server.mount_proc '/v0/topstories.json' do |req, res|
+      res['Content-Type'] = 'text/plain'
+      res.body = '[123123123, 123123123]'
+      res.status = 200
+      res
+    end
+  end
+end
+
+class BadJSONServer < TestWebServer
+  def setup_mounts server
+    server.mount_proc '/v0/topstories.json' do |req, res|
+      res['Content-Type'] = 'text/plain'
+      res.body = '[badjson, 123123]'
+      res.status = 200
+      res
+    end
+  end
+end
+
+class ReadTimeoutServer < TestWebServer
+  def setup_mounts server
+    server.mount_proc '/v0/topstories.json' do |req, res|
+      Kernel.sleep 8
+      res['Content-Type'] = 'text/plain'
+      res.body = '[badjson, 123123]'
+      res.status = 200
+      res
+    end
+  end
+end
 
 describe HNCollect do
   context "check the caching" do
@@ -54,6 +142,59 @@ describe HNCollect do
     it "should return a number less than 60 seconds" do
       expect(HNCollect.adjusted_delay(100, 103)).to eq 57
     end
+  end
+
+  RSpec.shared_context "connecting to test webserver" do
+    let(:server) { nil }
+    before :context do
+      HNCollect.HackerNewsURL = 'localhost'
+      HNCollect.HackerNewsPort = '8080'
+    end
+    after :example do
+      @server.stop if @server
+    end
+  end
+
+  describe "various results from connecting and querying a webserver" do
+
+    describe "successful call to top stories" do
+      include_context "connecting to test webserver"
+      before :example do
+        @server = GoodTopStoriesServer.new
+      end
+      it "will query server and find a hacker news id for the current top hit" do
+        expect(HNCollect.get_top_hit).to eq 123123123
+      end
+    end
+
+    describe "bad JSON" do
+      include_context "connecting to test webserver"
+      before :example do
+        @server = BadJSONServer.new
+      end
+      it "will raise an exception indicating a problem with the JSON" do
+        expect { HNCollect.get_top_hit }.to raise_error(JSON::ParserError)
+      end
+    end
+
+    describe "what happens when the hacker news server isn't responding?" do
+      # notice that a web server has not been started.
+      it "will raise an exception because the webserver isn't running" do
+        expect { HNCollect.https_get 'nonexistent' }.to raise_error(Errno::ECONNREFUSED)
+      end
+    end
+
+    describe "read timeout to webserver" do
+      include_context "connecting to test webserver"
+      before :example do
+        @server = ReadTimeoutServer.new
+        HNCollect.ReadTimeOut = 5
+      end
+      it "will raise an exception indicating a problem with the JSON" do
+        expect { HNCollect.get_top_hit }.to raise_error(Net::ReadTimeout)
+      end
+    end
+
   end
 
 end
