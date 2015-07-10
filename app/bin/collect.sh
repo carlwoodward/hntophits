@@ -13,8 +13,10 @@ set -e
 
 trap '' 1
 
+# default to production environment
+
 LogStdout=log/HNCollect.stdout LogStderr=log/HNCollect.stderr
-ENVIRONMENT= Env=
+ENVIRONMENT="-e production" Env=
 if [[ ! -z $1 ]]
 then
     case "$1" in
