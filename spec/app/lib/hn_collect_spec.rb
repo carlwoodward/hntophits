@@ -197,4 +197,14 @@ describe HNCollect do
 
   end
 
+  describe "removing the reliance on collect.sh to restart the collection of data from hacker news" do
+    it "will exercise the situation where an unexpected exception is thrown" do
+      expect(HNCollect).to receive(:at_the_beginning_of_the_next_minute) { raise StandardError }
+      expect(HNTools).to receive(:email).with(/HNCollect.run: unexpected exception/)
+      # since it's not possible to stub out retry
+      expect(Kernel).to receive(:sleep).with(14) { raise }
+      expect { HNCollect.run }.to raise_error(StandardError)
+    end
+  end
+
 end
