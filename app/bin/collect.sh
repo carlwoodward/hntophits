@@ -11,6 +11,8 @@ set -x
 # Fail if a variable hasn't been defined
 set -e
 
+trap '' 1
+
 LogStdout=log/HNCollect.stdout LogStderr=log/HNCollect.stderr
 ENVIRONMENT= Env=
 if [[ ! -z $1 ]]
@@ -27,7 +29,7 @@ echo "Using \"$Env\" environment"
 
 while true
 do
-    bundle exec rails runner $ENVIRONMENT 'HNCollect.run' 2>&1 | tee -a log/HNCollect.log 
+    bundle exec rails runner $ENVIRONMENT 'HNCollect.run' > log/HNCollect.log 2>&1
     tail $LogStdout $LogStderr | mailx -t bruce.woodward@gmail.com -s 'HNCollect stopped'
     sleep 10
 done
