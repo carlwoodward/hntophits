@@ -120,5 +120,9 @@ module HNCollect
         load_data_from_hackernews
       end
     end
+  rescue => e
+    HNTools.email "#{Time.now} HNCollect.run: unexpected exception #{e.inspect}; retrying"
+    Kernel.sleep 14
+    retry
   end
 end
