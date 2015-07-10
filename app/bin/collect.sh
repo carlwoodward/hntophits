@@ -15,7 +15,6 @@ trap '' 1
 
 # default to production environment
 
-LogStdout=log/HNCollect.stdout LogStderr=log/HNCollect.stderr
 ENVIRONMENT="-e production" Env=
 if [[ ! -z $1 ]]
 then
@@ -32,6 +31,6 @@ echo "Using \"$Env\" environment"
 while true
 do
     bundle exec rails runner $ENVIRONMENT 'HNCollect.run' > log/HNCollect.log 2>&1
-    tail $LogStdout $LogStderr | mailx -t bruce.woodward@gmail.com -s 'HNCollect stopped'
-    sleep 10
+    tail -100 log/HNCollect.log | mailx -t bruce.woodward@gmail.com -s 'HNCollect stopped'
+    sleep 13
 done
