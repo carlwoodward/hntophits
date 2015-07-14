@@ -30,7 +30,7 @@ echo "Using \"$Env\" environment"
 
 while true
 do
-    bundle exec rails runner $ENVIRONMENT 'HNCollect.run' > log/HNCollect.log 2>&1
+    bundle exec rails runner $ENVIRONMENT 'HNCollect.run' >> log/HNCollect.log 2>&1
     tail -100 log/HNCollect.log | mailx -t bruce.woodward@gmail.com -s 'HNCollect stopped'
     sleep 13
 done
