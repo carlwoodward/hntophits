@@ -6,7 +6,7 @@ require 'json'
 
 module HNCollect
 
-  class ServerUnavaiable < StandardError; end
+  class ServerUnavailable < StandardError; end
 
   @cache = {
     hn_id: nil,
@@ -44,13 +44,17 @@ module HNCollect
     return @cache.values_at(:hn_id, :description, :href)
   end
 
+  def https_response_code_bad? code
+    Integer(code) == 200 ? false : true
+  end
+
   def https_get path
     http = Net::HTTP.new(@HackerNewsURL, @HackerNewsPort)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     http.read_timeout = @ReadTimeOut
     resp, data = http.get(path, nil)
-    raise HNCollect::ServerUnavaiable, resp if Integer(resp.code) != 200
+    raise HNCollect::ServerUnavailable, resp if https_response_code_bad?(resp.code)
     JSON.parse(resp.body)
   end
 
@@ -83,14 +87,10 @@ module HNCollect
 
   def run_every_minute
     loop do
-      begin
-        start_time = Time.now
-        yield
-        end_time = Time.now
-        sleep adjusted_delay(end_time, start_time)
-      rescue => e
-        puts e.messages
-      end
+      start_time = Time.now
+      yield
+      end_time = Time.now
+      sleep adjusted_delay(end_time, start_time)
     end
   end
 
@@ -111,6 +111,10 @@ module HNCollect
     HNTools.email "#{time}: connection refused to HackerNews"
   rescue JSON::ParserError
     HNTools.email "#{time}: bad JSON data returned"
+  rescue HNCollect::ServerUnavailable
+    HNTools.email "#{time}: server unavailable - retrying"
+    Kernel.sleep 5
+    retry
   end
 
   def run

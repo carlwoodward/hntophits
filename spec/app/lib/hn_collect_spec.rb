@@ -207,4 +207,37 @@ describe HNCollect do
     end
   end
 
+  context "trigger Net::ReadTimeout exception" do
+    it "will exercise the Net::ReadTimeout exception and check for proper handling" do
+      expect(HNCollect).to receive(:get_top_hit) { raise Net::ReadTimeout }
+      expect(HNTools).to receive(:email).with(/timeout reading data/)
+      HNCollect.load_data_from_hackernews
+    end
+  end
+
+  context "trigger Errno::ECONNREFUSED exception" do
+    it "will exercise the Errno::ECONNREFUSED exception and check for proper handling" do
+      expect(HNCollect).to receive(:get_top_hit) { raise Errno::ECONNREFUSED }
+      expect(HNTools).to receive(:email).with(/connection refused to HackerNews/)
+      HNCollect.load_data_from_hackernews
+    end
+  end
+
+  context "trigger JSON::ParserError exception" do
+    it "will exercise the JSON::ParserError exception and check for proper handling" do
+      expect(HNCollect).to receive(:get_top_hit) { raise JSON::ParserError }
+      expect(HNTools).to receive(:email).with(/bad JSON data returned/)
+      HNCollect.load_data_from_hackernews
+    end
+  end
+
+  context "trigger HNCollect::ServerUnavaiable exception" do
+    it "will exercise the HNCollect::ServerUnavailable exception and check for proper handling" do
+      expect(HNCollect).to receive(:get_top_hit) { raise HNCollect::ServerUnavailable }
+      expect(HNTools).to receive(:email).with(/server unavailable/)
+      expect(Kernel).to receive(:sleep).with(5) { raise StandardError }
+      expect { HNCollect.load_data_from_hackernews }.to raise_error(StandardError)
+    end
+  end
+
 end
