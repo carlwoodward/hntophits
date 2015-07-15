@@ -1,0 +1,15 @@
+.row
+  .col-md-12
+    .stories
+      %h2 Recent Top Hits
+      %table.table
+        %tr
+          %th Time since #1
+          %th Story
+        - @stories.each do |story|
+          %tr
+            %td
+              = time_ago_in_words(story.updated_at.localtime)
+            %td
+              %a(href="#{story.href}") #{story.description}
+    = paginate @stories
