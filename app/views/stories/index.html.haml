@@ -1,26 +1,21 @@
-
-.container-fluid
-  .jumbotron.text-center
-    %h1 Hacker News Top Hits
-    .list-inline
-      %li.small
-        started July 10 '15
-  .row
-    .col-md-6
-      .stories
-        %h2 Recent Top Hits
-        %table.table.table-condensed
-          - @top_hits.each_with_index do |tophit, i|
-            %tr
-              %td
-                %a(href="#{tophit.href}") #{tophit.description}
-    .col-md-6
-      .stories
-        %h2 Time spent at #1
-        %table.table.table-condensed
-          - @stories.each do |story|
-            %tr
-              %td.story-time
-                = minutes_to_words(story.time_at_num_one)
-              %td
-                %a(href="#{story.href}") #{story.description}
+.row
+  .col-md-6
+    .stories
+      %h2
+        = link_to 'Recent Top Hits', :controller => 'show_stories', :action => :show, :id => 0
+      %table.table.table-condensed
+        - @top_hits.each_with_index do |tophit, i|
+          %tr
+            %td
+              %a(href="#{tophit.href}") #{tophit.description}
+  .col-md-6
+    .stories
+      %h2
+        = link_to 'Time spent at #1', :controller => 'show_top_hits', :action => :show, :id => 0
+      %table.table.table-condensed
+        - @stories.each do |story|
+          %tr
+            %td.story-time
+              = minutes_to_words(story.time_at_num_one)
+            %td
+              %a(href="#{story.href}") #{story.description}

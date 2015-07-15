@@ -28,4 +28,20 @@
     margin: 5px;
     font-weight: 900;
   }
+  a:link {
+    text-decoration: none;
+    color: $gray-base;
+  }
+  a:visited {
+    text-decoration: none;
+    color: $gray-base;
+  }
+  a:hover {
+    text-decoration: none;
+    color: $gray-base;
+  }
+  a:active {
+    text-decoration: none;
+    color: $gray-base;
+  }
 }

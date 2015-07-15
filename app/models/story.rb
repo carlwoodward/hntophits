@@ -8,6 +8,9 @@ class Story < ActiveRecord::Base
   validates :description, presence: true
   validates_uniqueness_of :hn_id
 
+  scope :last_seen, -> { order(:updated_at => :desc) }
+  scope :most_time_at_number_one, -> { order(:time_at_num_one => :desc) }
+
   def self.autovivify(hn_id:, date:, href:, description:)
     story = Story.find_by(hn_id: hn_id)
     if story
