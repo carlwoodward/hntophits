@@ -9,7 +9,7 @@
 # No harm in seeing what is happening.
 set -x
 # Fail if a variable hasn't been defined
-set -e
+set -u
 
 trap '' 1
 
