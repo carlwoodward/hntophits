@@ -27,18 +27,54 @@ class TopHit < ActiveRecord::Base
     end
   end
 
-  def self.get_recent_top_hits
-    recent_top_hits = []
-    stories = Hash.new(0)
-    # find ten unique stories in date order.
-    TopHit.order(date_seen: :desc).limit(22).each do |tophit|
-      story = tophit.story
-      next if stories.has_key? story.id
-      stories[story.id] += 1
-      recent_top_hits << story
-      break if stories.length > 10
+  class TopHitsInChunks
+    def initialize
+      @offset, @records_per_search = 0, 50
+      @nrecords_read_last_time = 0
+      @first_time = true
     end
-    recent_top_hits
+    def next_chunk
+      records = TopHit.order(date_seen: :desc).offset(@offset).limit(@records_per_search)
+      @offset += 50
+      @nrecords_read_last_time = records.length
+      records
+    end
+    def still_records_to_read
+      if @first_time
+        @first_time = false
+        true
+      else
+        @nrecords_read_last_time == @records_per_search
+      end
+    end
+  end
+
+  class UniqueStories
+    def initialize
+      @unique_stories, @stories = [], Hash.new(0)
+    end
+    def add_if_unique story
+      if not @stories.has_key? story
+        @unique_stories << story
+        @stories[story] += 1
+      end
+    end
+    def list_of
+      @unique_stories
+    end
+  end
+
+  # find ten unique stories in date order.
+  def self.get_recent_top_hits(max_number_of_stories=10)
+    chunks = TopHitsInChunks.new
+    unique_stories = UniqueStories.new
+    while unique_stories.list_of.length < max_number_of_stories and chunks.still_records_to_read
+      chunks.next_chunk.each do |tophit|
+        unique_stories.add_if_unique tophit.story
+        break if unique_stories.list_of.length == max_number_of_stories
+      end
+    end
+    unique_stories.list_of
   end
 
 end
