@@ -54,5 +54,13 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
+  resources :show_stories do
+    get 'show/:page', :action => :show, :on => :collection
+  end
+
+  resource :show_top_hits do
+    get 'show/:page', :action => :show, :on => :collection
+  end
+
   root "stories#index"
 end
