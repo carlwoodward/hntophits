@@ -15,10 +15,10 @@ trap '' 1
 
 # default to production environment
 
-ENVIRONMENT="-e production" Env=
-if [[ ! -z $1 ]]
+ENVIRONMENT= Env=${1:-production}
+if [[ ! -z $Env ]]
 then
-    case "$1" in
+    case "$Env" in
         p*) Env=production  ;;
         d*) Env=development ;;
         t*) Env=test        ;;
