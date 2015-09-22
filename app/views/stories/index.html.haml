@@ -10,8 +10,18 @@
               %a(href="#{tophit.href}") #{tophit.description}
   .col-md-6
     .stories
-      %h2
-        = link_to 'Time spent at #1', :controller => 'show_top_hits', :action => :show, :id => 0
+      %ul.list-inline
+        %li
+          %h2
+            = link_to 'Time spent at #1', :controller => 'show_top_hits', :action => :show, :id => 0
+        %li.pull-right.time-frame
+          %ul.list-inline
+            %li.h5{:class => ('underlined' if !params.has_key?(:time_frame) || params[:time_frame] == 'week')}
+              = link_to 'this week', :controller => 'stories', :action => :index, :time_frame => 'week'
+            %li.h5{:class => ('underlined' if params.has_key?(:time_frame) && params[:time_frame] == 'month')}
+              = link_to 'this month', :controller => 'stories', :action => :index, :time_frame => 'month'
+            %li.h5{:class => ('underlined' if params.has_key?(:time_frame) && params[:time_frame] == 'alltime')}
+              = link_to 'all time', :controller => 'stories', :action => :index, :time_frame => 'alltime'
       %table.table.table-condensed
         - @stories.each do |story|
           %tr
