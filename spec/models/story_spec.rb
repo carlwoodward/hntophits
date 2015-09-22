@@ -1,5 +1,68 @@
 require 'rails_helper'
 
 RSpec.describe Story, type: :model do
-  # not tests for Story at the moment
+  context "get_ordered_num_one_stories for week" do
+    context "when data is found to be returned" do
+      before(:each) do
+        Story.create(hn_id: 1, href: "fred", description: "first record").update(updated_at: 2.week.ago)
+        Story.create(hn_id: 2, href: "bert", description: "second record").update(updated_at: 3.days.ago)
+      end
+      it "should return the 3 day old record when given nil" do
+        expect(Story.get_ordered_num_one_stories(nil).first.hn_id).to eq 2
+      end
+      it "should return the 3 day old record when given the string 'week'" do
+        expect(Story.get_ordered_num_one_stories('week').first.hn_id).to eq 2
+      end
+      it "should return the 3 day old record when given invalid input" do
+        expect(Story.get_ordered_num_one_stories(:wrong).first.hn_id).to eq 2
+      end
+    end
+    context "when no data is found to be returned" do
+      before(:each) do
+        Story.create(hn_id: 1, href: "fred", description: "first record").update(updated_at: 2.week.ago)
+      end
+      it "should return the empty array when give nil" do
+        expect(Story.get_ordered_num_one_stories(nil).length).to eq 0
+      end
+      it "should return the empty array when given then string 'week'" do
+        expect(Story.get_ordered_num_one_stories(nil).length).to eq 0
+      end
+      it "should return the empty array when given invalid input" do
+        expect(Story.get_ordered_num_one_stories(nil).length).to eq 0
+      end
+    end
+  end
+
+  context "get_ordered_num_one_stories for month" do
+    context "when data is found to be returned" do
+      before(:each) do
+        Story.create(hn_id: 1, href: "fred", description: "first record").update(updated_at: 2.month.ago)
+        Story.create(hn_id: 2, href: "bert", description: "second record").update(updated_at: 3.week.ago)
+      end
+      it "should return the 3 week old record when given the string 'week'" do
+        expect(Story.get_ordered_num_one_stories('month').first.hn_id).to eq 2
+      end
+    end
+    context "when no data is found to be returned" do
+      before(:each) do
+        Story.create(hn_id: 1, href: "fred", description: "first record").update(updated_at: 2.week.ago)
+      end
+      it "should return the empty array when given then string 'month'" do
+        expect(Story.get_ordered_num_one_stories(nil).length).to eq 0
+      end
+    end
+  end
+
+  context "get_ordered_num_one_stories for all time" do
+    context "when data is found to be returned" do
+      before(:each) do
+        Story.create(hn_id: 1, href: "fred", description: "first record").update(updated_at: 2.month.ago)
+        Story.create(hn_id: 2, href: "bert", description: "second record").update(updated_at: 3.week.ago)
+        Story.create(hn_id: 3, href: "erny", description: "third record").update(updated_at: 9.month.ago)
+      end
+      it "should return all of the records" do
+        expect(Story.get_ordered_num_one_stories('alltime').length).to eq 3
+      end
+    end
+  end
 end
