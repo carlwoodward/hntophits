@@ -12,23 +12,32 @@ require 'rails_helper'
 # end
 RSpec.describe StoriesHelper, type: :helper do
   context "deal with less than an hour" do
-    it "should return 0 m" do # handle pathologic case.
-      expect(helper.minutes_to_words(10)).to eq "10m"
+    it "should return 1 min" do 
+      expect(helper.minutes_to_words(0)).to eq [1, "min"]
+    end
+    it "should return 1 min" do 
+      expect(helper.minutes_to_words(1)).to eq [1, "min"]
     end
     it "should return 10 m" do
-      expect(helper.minutes_to_words(10)).to eq "10m"
+      expect(helper.minutes_to_words(10)).to eq [10, "mins"]
     end
     it "should return 1 h" do
-      expect(helper.minutes_to_words(60)).to eq "1h"
+      expect(helper.minutes_to_words(60)).to eq [1, "hour"]
+    end
+    it "should return 1 h" do
+      expect(helper.minutes_to_words(70)).to eq [1, "hour"]
+    end
+    it "should return 2 h" do
+      expect(helper.minutes_to_words(130)).to eq [2, "hours"]
     end
     it "should return 1 d" do
-      expect(helper.minutes_to_words(1440)).to eq "1d"
+      expect(helper.minutes_to_words(1440)).to eq [1, "day"]
     end
     it "should return 2 d" do
-      expect(helper.minutes_to_words(1440*2)).to eq "2d"
+      expect(helper.minutes_to_words(1440*2)).to eq [2, "days"]
     end
     it "should return 2 d" do
-      expect(helper.minutes_to_words(1440*2+1)).to eq "2d"
+      expect(helper.minutes_to_words(1440*2+1)).to eq [2, "days"]
     end
   end
 end
