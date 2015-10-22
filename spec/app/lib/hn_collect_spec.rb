@@ -36,11 +36,19 @@ class TestWebServer
 
   def stop
     if process_is_still_running
-      Process.kill('TERM', @pid)
+      kill_the_process
       while process_is_still_running
-        Kernel.sleep 0.6
+        wait_for_a_bit
       end
     end
+  end
+
+  def kill_the_process
+    Process.kill('TERM', @pid)
+  end
+
+  def wait_for_a_bit
+    Kernel.sleep 0.6
   end
 
   def process_is_still_running
