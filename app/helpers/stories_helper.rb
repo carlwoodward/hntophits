@@ -1,5 +1,9 @@
 module StoriesHelper
   extend self
+  def plural? units, value
+    value.to_i == 1 ? units : "#{units}s"
+  end
+
   def minutes_to_words(minutes)
     minutes = Integer(minutes)
     minutes = 1 if minutes == 0
@@ -8,15 +12,19 @@ module StoriesHelper
     month = Integer(day * 30.4)
     year = Integer(12 * month)
     if minutes < hour
-      [minutes, minutes == 1 ? 'min' : 'mins']
+      "#{minutes} #{plural?("min", minutes)}"
     elsif minutes < day
-      [(minutes/hour).to_i, (minutes/hour).to_i == 1 ? 'hour' : 'hours']
+      hours = (minutes/hour).to_i
+      "#{hours} #{plural?("hour", hours)}"
     elsif minutes < month
-      [(minutes/day).to_i, (minutes/day).to_i == 1 ? 'day' : 'days']
+      days = (minutes/day).to_i
+      "#{days} #{plural?("day", days)}"
     elsif minutes < year
-      [(minutes/month).to_i, (minutes/month).to_i == 1 ? 'month' : 'months']
+      months = (minutes/month).to_i
+      "#{months} #{plural?("month", months)}"
     else
-      [(minutes/year).to_i, (minutes/year).to_i == 1 ? 'year' : 'years']
+      years = (minutes/year).to_i
+      "#{years} #{plural?("year", years)}"
     end
   end
 
