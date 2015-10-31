@@ -21,12 +21,13 @@
 .jumbotron {
   font-family: Verdana, Geneva, sans-serif;
   padding-top: 9px;
-  padding-bottom: 12px;
+  padding-bottom: 5px;
   margin-top: 30px;
   h1 { 
     letter-spacing: -5px;
     margin: 5px;
     font-size: 3em;
+    font-weight: 800;
   }
   a:link {
     text-decoration: none;
@@ -48,6 +49,8 @@
 
 .what-is-info {
   color: #FFF0E0;
+  padding-top: 0.5em;
+  margin-bottom: 0;
   a:link {
     text-decoration: none;
     color: #FFF0E0;
