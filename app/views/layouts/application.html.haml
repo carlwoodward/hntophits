@@ -9,10 +9,21 @@
     = csrf_meta_tags
   %body
     .container
-      .jumbotron.text-center
-        %h1 
-          = link_to 'Hacker News Top Hits', :controller => :stories
-        .list-inline
+      .jumbotron
+        %ul.list-inline
+          %li
+            %h1
+              = link_to 'Hacker News Top Hits', :controller => :stories
           %li.small
-            started July 10 '15
+            %ul.what-is-info
+              %li
+                %a(href='https://news.ycombinator.com') Hacker News is a user story submission site.
+              %li
+                Recent top hits; stories that have been voted up to the top spot.
+              %li
+                Time spent at #1; track the most popular stories.
+              %li
+                Collecting stories since July 10 '15
+              %li
+                %a(href='https://github.com/bruceb3/hntophits') Top Hits Source code.
       = yield
