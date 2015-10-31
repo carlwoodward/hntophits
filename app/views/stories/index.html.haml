@@ -4,10 +4,9 @@
       %h2
         = link_to 'Recent Top Hits', :controller => 'show_stories', :action => :show, :id => 0
       %table.table.table-condensed
-        - @top_hits.each_with_index do |tophit, i|
+        - @top_hits.each do |tophit|
           %tr
-            %td
-              %a(href="#{tophit.href}") #{tophit.description}
+            = render :partial => 'story', :locals => { :story => tophit, :past_tense => true }
   .col-md-6
     .stories
       %ul.list-inline
@@ -22,10 +21,7 @@
               = link_to 'this month', :controller => 'stories', :action => :index, :time_frame => 'month'
             %li.h5{:class => ('underlined' if params.has_key?(:time_frame) && params[:time_frame] == 'alltime')}
               = link_to 'all time', :controller => 'stories', :action => :index, :time_frame => 'alltime'
-      %table.table.table-condensed
+      %table.table
         - @stories.each do |story|
           %tr
-            %td.story-time
-              = minutes_to_words(story.time_at_num_one)
-            %td
-              %a(href="#{story.href}") #{story.description}
+            = render :partial => 'story', :locals => { :story => story, :past_tense => false }
