@@ -3,13 +3,7 @@
     .stories
       %h2 Most time spent at #1
       %table.table
-        %tr
-          %th Time spent at #1
-          %th Story
         - @stories.each do |story|
           %tr
-            %td
-              = minutes_to_words(story.time_at_num_one)
-            %td
-              %a(href="#{story.href}") #{story.description}
+            = render :partial => 'stories/story', :locals => { :story => story, :past_tense => true }
     = paginate @stories
