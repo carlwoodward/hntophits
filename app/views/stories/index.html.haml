@@ -2,17 +2,17 @@
   .col-md-6
     .stories
       %h2
-        = link_to 'Recent Top Hits', :controller => 'show_stories', :action => :show, :id => 0
+        = link_to 'Recent Top Hits', :controller => 'show_top_hits', :action => :show, :id => 0
       %table.table.table-condensed
         - @top_hits.each do |tophit|
           %tr
-            = render :partial => 'story', :locals => { :story => tophit, :past_tense => true }
+            = render :partial => 'tophit', :locals => { :tophit => tophit }
   .col-md-6
     .stories
       %ul.list-inline
         %li
           %h2
-            = link_to 'Time spent at #1', :controller => 'show_top_hits', :action => :show, :id => 0
+            = link_to 'Time spent at #1', :controller => 'show_stories', :action => :show, :id => 0
         %li.pull-right.time-frame
           %ul.list-inline
             %li.h5{:class => ('underlined' if !params.has_key?(:time_frame) || params[:time_frame] == 'week')}
