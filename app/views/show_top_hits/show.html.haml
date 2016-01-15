@@ -1,9 +1,9 @@
 .row
   .col-md-12
     .stories
-      %h2 Most time spent at #1
+      %h2 Recent Top Hits
       %table.table
-        - @stories.each do |story|
+        - @stories.each do |tophit|
           %tr
-            = render :partial => 'stories/story', :locals => { :story => story, :past_tense => true }
+            = render :partial => 'stories/tophit', :locals => { :tophit => tophit }
     = paginate @stories
