@@ -1,4 +1,4 @@
-%td.story-time
+%td.story-duration
   %a(href="#{build_hacker_news_href(story.hn_id)}") 
     = minutes_to_words(story.time_at_num_one) + (past_tense ? ' ago' : '')
 %td
