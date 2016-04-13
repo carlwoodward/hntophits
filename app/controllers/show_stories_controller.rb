@@ -1,7 +1,7 @@
 class ShowStoriesController < ApplicationController
 
   def show
-    @stories = Story.last_seen.page(params[:page])
+    @stories = Story.by_most_time.page(params[:page])
   end
 
 end
