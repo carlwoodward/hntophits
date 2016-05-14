@@ -58,7 +58,7 @@ Rails.application.routes.draw do
     get 'show/:page', :action => :show, :on => :collection
   end
 
-  resource :show_top_hits do
+  resources :show_top_hits do
     get 'show/:page', :action => :show, :on => :collection
   end
 
