@@ -3,7 +3,7 @@
     .stories
       %h2 Recent Top Hits
       %table.table
-        - @stories.each do |tophit|
+        - @top_hits.each do |tophit|
           %tr
             = render :partial => 'stories/tophit', :locals => { :tophit => tophit }
-    = paginate @stories
+    = paginate @top_hits
