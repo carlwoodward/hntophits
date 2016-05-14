@@ -1,7 +1,7 @@
 class ShowTopHitsController < ApplicationController
 
   def show
-    @stories = Story.most_time_at_number_one.page(params[:page])
+    @top_hits = TopHit.recent_top_hits.page(params[:page])
   end
 
 end
