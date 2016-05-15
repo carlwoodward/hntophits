@@ -20,9 +20,9 @@ RSpec.describe TopHit, type: :model do
       create(:top_hit, date_seen: Time.now - 3 * 60, story: stories[1])
       ordered_stories = TopHit.get_recent_top_hits
       expect(ordered_stories.length).to eq 3
-      expect(ordered_stories[0].id).to eq stories[0].id
-      expect(ordered_stories[1].id).to eq stories[2].id
-      expect(ordered_stories[2].id).to eq stories[1].id
+      expect(ordered_stories[0].story_id).to eq stories[0].id
+      expect(ordered_stories[1].story_id).to eq stories[2].id
+      expect(ordered_stories[2].story_id).to eq stories[1].id
     end
   end
 
@@ -37,7 +37,6 @@ RSpec.describe TopHit, type: :model do
     let!(:record) do
       story = create(:story)
       create(:top_hit, date_seen: Time.now, story: story)
-      story
     end
     it "will return the only record in the table" do
       expect(TopHit.get_recent_top_hits.length).to eq 1
