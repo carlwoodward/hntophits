@@ -5,8 +5,9 @@ class TopHit < ActiveRecord::Base
   validates :story_id, numericality: { integer_only: true } 
 
   scope :recent_top_hits, -> {
-    select("x.story_id", "x.date_seen")
-    .from("(select row_number() over (partition by story_id order by date_seen desc) as rn, story_id, date_seen from top_hits) x")
+    select('"x".*')
+    .from("(select row_number() over (partition by story_id order by date_seen desc) as rn, " +
+          "id, story_id, date_seen, created_at, updated_at from top_hits) x")
     .where("x.rn = 1")
     .order("x.date_seen desc")
   }
