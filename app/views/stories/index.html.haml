@@ -1,27 +1,29 @@
 .row
-  .col-md-6
-    .stories
-      %h2
-        = link_to 'Recent Top Hits', :controller => 'show_top_hits', :action => :show, :id => 0
-      %table.table.table-condensed
-        - @top_hits.each do |tophit|
-          %tr
-            = render :partial => 'tophit', :locals => { :tophit => tophit }
-  .col-md-6
-    .stories
-      %ul.list-inline
-        %li
-          %h2
-            = link_to 'Time spent at #1', :controller => 'show_stories', :action => :show, :id => 0
-        %li.pull-right.time-frame
-          %ul.list-inline
-            %li.h5{:class => ('underlined' if !params.has_key?(:time_frame) || params[:time_frame] == 'week')}
-              = link_to 'this week', :controller => 'stories', :action => :index, :time_frame => 'week'
-            %li.h5{:class => ('underlined' if params.has_key?(:time_frame) && params[:time_frame] == 'month')}
-              = link_to 'this month', :controller => 'stories', :action => :index, :time_frame => 'month'
-            %li.h5{:class => ('underlined' if params.has_key?(:time_frame) && params[:time_frame] == 'alltime')}
-              = link_to 'all time', :controller => 'stories', :action => :index, :time_frame => 'alltime'
-      %table.table
-        - @stories.each do |story|
-          %tr
-            = render :partial => 'story', :locals => { :story => story, :past_tense => false }
+  .recent_top_hits
+    .col-md-6
+      .stories
+        %h2
+          = link_to 'Recent Top Hits', :controller => 'show_top_hits', :action => :show, :id => 0
+        %table.table.table-condensed
+          - @top_hits.each do |tophit|
+            %tr
+              = render :partial => 'tophit', :locals => { :tophit => tophit }
+  .loved_stories
+    .col-md-6
+      .stories
+        %ul.list-inline
+          %li
+            %h2
+              = link_to 'Time spent at #1', :controller => 'show_stories', :action => :show, :id => 0
+          %li.pull-right.time-frame
+            %ul.list-inline
+              %li.h5{:class => ('underlined' if !params.has_key?(:time_frame) || params[:time_frame] == 'week')}
+                = link_to 'this week', :controller => 'stories', :action => :index, :time_frame => 'week'
+              %li.h5{:class => ('underlined' if params.has_key?(:time_frame) && params[:time_frame] == 'month')}
+                = link_to 'this month', :controller => 'stories', :action => :index, :time_frame => 'month'
+              %li.h5{:class => ('underlined' if params.has_key?(:time_frame) && params[:time_frame] == 'alltime')}
+                = link_to 'all time', :controller => 'stories', :action => :index, :time_frame => 'alltime'
+        %table.table
+          - @stories.each do |story|
+            %tr
+              = render :partial => 'story', :locals => { :story => story, :past_tense => false }
