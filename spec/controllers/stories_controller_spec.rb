@@ -4,12 +4,11 @@ RSpec.describe StoriesController, type: :controller do
 
   describe "GET #index" do
     it "check top_hits and stories coming through from the controller" do
-      stories = []
-      0.upto(2) do |i|
+      stories = 0.upto(2).map do |i|
         story = create(:story)
         story.time_at_num_one = 2 - i
         story.save
-        stories << story
+        story
       end
       tophits = []
       tophits << create(:top_hit, date_seen: Time.now - 60, story: stories[0])
