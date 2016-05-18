@@ -10,11 +10,11 @@
   %body
     .container
       .jumbotron
-        %ul.list-inline
-          %li
+        .row
+          .col-md-8
             %h1
               = link_to 'Hacker News Top Hits', :controller => :stories
-          %li.small.pull-right
+          .col-md-4
             %ul.what-is-info
               %li
                 Collecting stories since July 10 '15
