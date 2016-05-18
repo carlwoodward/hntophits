@@ -7,22 +7,69 @@ Things you may want to cover:
 
 * Ruby version
 
+2.1.2
+
 * System dependencies
+
+Postgresql
 
 * Configuration
 
 * Database creation
 
+Usual rails.
+
 * Database initialization
+
+As above.
 
 * How to run the test suite
 
+bundle exec rspec
+
 * Services (job queues, cache servers, search engines, etc.)
+
+Collection of Hacker News info via a Rails runner.
+
+Run the script app/bin/collect.sh in the background to start updating the database.
 
 * Deployment instructions
 
-* ...
+Find and kill all of the processes associated with the collection of Hacker News data.
 
+$ ps -efH
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Looking for the processes underneath and indented more than the collect.sh process.
+
+Kill all of these process;
+
+kill <pid> <pid> ...
+
+Check that the processes have been killed.
+
+Get the latest version of the hntophits.net site.
+
+cd /opt/hntophits/prod/hntophits
+git pull
+
+Make sure that sha1 matches from the current master branch to what is on survivor.
+
+Start the collection of data.
+
+app/bin/collect.sh &
+
+Precompile the CSS
+
+RAILS_ENV=production bundle exec rake assets:precompile
+
+Check that unicorn isn't running (it shouldn't be).
+
+RAILS_ENV=production bundle exec rake unicorn:status
+
+A message about unicorn not being started should be shown.
+
+RAILS_ENV=production bundle exec rake unicorn:start
+
+Run ps command to check that all processes are running as expected.
+
+Check the website.
