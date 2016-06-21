@@ -17,13 +17,14 @@ class Story < ActiveRecord::Base
   scope :last_month, -> { newer_than_days(1.month.ago) }
   scope :all_time, -> { by_most_time }
 
-  def self.autovivify(hn_id:, date:, href:, description:)
-    story = Story.find_by(hn_id: hn_id)
+  def self.process(hn_id:, date:, href:, description:)
+    story = Story.find_or_create_by(hn_id: hn_id) do |r|
+      r.href ||= ApplicationHelper.build_hacker_news_href(hn_id)
+      r.description = description
+    end
     if story
       story.time_at_num_one += 1
       story.save
-    else
-      story = Story.create(hn_id: hn_id, href: href, description: description)
     end
     story
   end
