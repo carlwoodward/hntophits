@@ -105,6 +105,8 @@ module HNCollect
     hn_id, description, href = get_top_hit_details(top_hit)
     puts "#{time}: #{hn_id} '#{description}' '#{href}'"
     HN.process_latest_hn_num_one(hn_id: hn_id, description: description, href: href, date: Time.now)
+  rescue ActiveRecord::RecordInvalid => e
+    #
   rescue Net::ReadTimeout
     HNTools.email "#{time}: timeout reading data - ignoring"
   rescue Errno::ECONNREFUSED

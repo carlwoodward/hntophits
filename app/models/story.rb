@@ -18,13 +18,13 @@ class Story < ActiveRecord::Base
   scope :all_time, -> { by_most_time }
 
   def self.process(hn_id:, date:, href:, description:)
-    story = Story.find_or_create_by(hn_id: hn_id) do |r|
+    story = Story.find_or_create_by!(hn_id: hn_id) do |r|
       r.href ||= ApplicationHelper.build_hacker_news_href(hn_id)
       r.description = description
     end
     if story
       story.time_at_num_one += 1
-      story.save
+      story.save!
     end
     story
   end
