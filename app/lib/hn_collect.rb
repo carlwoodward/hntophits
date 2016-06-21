@@ -106,17 +106,22 @@ module HNCollect
     puts "#{time}: #{hn_id} '#{description}' '#{href}'"
     HN.process_latest_hn_num_one(hn_id: hn_id, description: description, href: href, date: Time.now)
   rescue ActiveRecord::RecordInvalid => e
-    #
+    log_error "Bad Data: #{e}"
   rescue Net::ReadTimeout
-    HNTools.email "#{time}: timeout reading data - ignoring"
+    log_error "Network Time out"
   rescue Errno::ECONNREFUSED
-    HNTools.email "#{time}: connection refused to HackerNews"
+    log_error "connection refused"
   rescue JSON::ParserError
-    HNTools.email "#{time}: bad JSON data returned"
+    log_error "bad JSON data returned"
   rescue HNCollect::ServerUnavailable
-    HNTools.email "#{time}: server unavailable - retrying"
+    log_error "server unavailable - retrying"
     Kernel.sleep 5
     retry
+  end
+
+  # TODO put this in a more appropriate module.
+  def log_error msg
+    Rails.logger.error "TOPHITSERROR #{msg}"
   end
 
   def run
@@ -127,7 +132,7 @@ module HNCollect
       end
     end
   rescue => e
-    HNTools.email "#{Time.now} HNCollect.run: unexpected exception #{e.inspect}; retrying"
+    log_error "HNCollect.run: unexpected exception #{e.inspect}; retrying"
     Kernel.sleep 14
     retry
   end

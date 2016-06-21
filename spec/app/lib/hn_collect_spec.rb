@@ -208,7 +208,7 @@ describe HNCollect do
   describe "removing the reliance on collect.sh to restart the collection of data from hacker news" do
     it "will exercise the situation where an unexpected exception is thrown" do
       expect(HNCollect).to receive(:at_the_beginning_of_the_next_minute) { raise StandardError }
-      expect(HNTools).to receive(:email).with(/HNCollect.run: unexpected exception/)
+      expect(HNCollect).to receive(:log_error).with(/HNCollect.run: unexpected exception/)
       # since it's not possible to stub out retry
       expect(Kernel).to receive(:sleep).with(14) { raise }
       expect { HNCollect.run }.to raise_error(StandardError)
@@ -218,7 +218,7 @@ describe HNCollect do
   context "trigger Net::ReadTimeout exception" do
     it "will exercise the Net::ReadTimeout exception and check for proper handling" do
       expect(HNCollect).to receive(:get_top_hit) { raise Net::ReadTimeout }
-      expect(HNTools).to receive(:email).with(/timeout reading data/)
+      expect(HNCollect).to receive(:log_error).with(/Network Time out/)
       HNCollect.load_data_from_hackernews
     end
   end
@@ -226,7 +226,7 @@ describe HNCollect do
   context "trigger Errno::ECONNREFUSED exception" do
     it "will exercise the Errno::ECONNREFUSED exception and check for proper handling" do
       expect(HNCollect).to receive(:get_top_hit) { raise Errno::ECONNREFUSED }
-      expect(HNTools).to receive(:email).with(/connection refused to HackerNews/)
+      expect(HNCollect).to receive(:log_error).with(/connection refused/)
       HNCollect.load_data_from_hackernews
     end
   end
@@ -234,7 +234,7 @@ describe HNCollect do
   context "trigger JSON::ParserError exception" do
     it "will exercise the JSON::ParserError exception and check for proper handling" do
       expect(HNCollect).to receive(:get_top_hit) { raise JSON::ParserError }
-      expect(HNTools).to receive(:email).with(/bad JSON data returned/)
+      expect(HNCollect).to receive(:log_error).with(/bad JSON data returned/)
       HNCollect.load_data_from_hackernews
     end
   end
@@ -242,7 +242,7 @@ describe HNCollect do
   context "trigger HNCollect::ServerUnavaiable exception" do
     it "will exercise the HNCollect::ServerUnavailable exception and check for proper handling" do
       expect(HNCollect).to receive(:get_top_hit) { raise HNCollect::ServerUnavailable }
-      expect(HNTools).to receive(:email).with(/server unavailable/)
+      expect(HNCollect).to receive(:log_error).with(/server unavailable/)
       expect(Kernel).to receive(:sleep).with(5) { raise StandardError }
       expect { HNCollect.load_data_from_hackernews }.to raise_error(StandardError)
     end
