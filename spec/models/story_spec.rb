@@ -65,4 +65,53 @@ RSpec.describe Story, type: :model do
       end
     end
   end
+
+  context "exercise self.process" do
+    context "successful use" do
+      it "will return story that has been populated as expected (correctly)" do
+        date = Time.now
+        description = "description"
+        href = "href"
+        story = Story.process(hn_id: 1, date: date, description: description, href: href)
+        expect(story.hn_id).to eq 1
+        expect(story.description).to eq description
+        expect(story.href).to eq href
+      end
+    end
+
+    context "when there are errors" do
+      context "hacker news id is invalid" do
+        it "should throw ActiveRecord::RecordInvalid" do
+          expect {
+            Story.process(hn_id: "a string", date: Time.now, description: "description", href: nil)
+          }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+
+      context "href is nil or empty string" do
+        it "will create href with the default" do
+          hn_id = 1
+          story = Story.process(hn_id: hn_id, date: Time.now, description: "description", href: nil)
+          expect(story.valid?).to be true
+          expect(story.href).to eq ApplicationHelper.build_hacker_news_href(hn_id)
+        end
+
+        it "will create href with the default" do
+          hn_id = 1
+          story = Story.process(hn_id: hn_id, date: Time.now, description: "description", href: '')
+          expect(story.valid?).to be true
+          expect(story.href).to eq ApplicationHelper.build_hacker_news_href(hn_id)
+        end
+      end
+
+      context "description is nil is invalid" do
+        it "should throw ActiveRecord::RecordInvalid" do
+          expect {
+            Story.process(hn_id: "a string", date: Time.now, description: nil, href: nil)
+          }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+    end
+  end
+
 end
