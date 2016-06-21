@@ -19,7 +19,7 @@ class Story < ActiveRecord::Base
 
   def self.process(hn_id:, date:, href:, description:)
     story = Story.find_or_create_by!(hn_id: hn_id) do |r|
-      r.href ||= ApplicationHelper.build_hacker_news_href(hn_id)
+      r.href = href.blank? ? ApplicationHelper.build_hacker_news_href(hn_id) : href
       r.description = description
     end
     if story
