@@ -1,7 +1,7 @@
 
 require "#{Dir.pwd}/app/lib/load_db"
 require 'tmpdir'
-require_relative "../../rails_helper"
+require "rails_helper"
 
 Fixtures_directory = File.expand_path('test/fixture/load_html/downloads')
 NewFormatFile = 'news.1504170600.gz'
