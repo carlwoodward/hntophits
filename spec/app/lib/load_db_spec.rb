@@ -1,6 +1,7 @@
 
 require "#{Dir.pwd}/app/lib/load_db"
 require 'tmpdir'
+require "spec_helper"
 require "rails_helper"
 
 Fixtures_directory = File.expand_path('test/fixture/load_html/downloads')
@@ -10,6 +11,16 @@ def reset_fixtures_directory_contents(dirname)
   Dir.chdir dirname
   Dir.glob("Onews*") do |file|
     FileUtils.move file, file.sub(/^O/, '')
+  end
+end
+
+def capture_stderr
+  tty = `tty`.chomp!
+  Tempfile.create('foobarstuff') do |tmpfile|
+    $stderr.reopen(tmpfile, "w")
+    yield
+    $stderr.reopen(tty, "w")
+    File.readlines(tmpfile)
   end
 end
 
@@ -125,20 +136,50 @@ RSpec.describe LoadDB do
         reset_fixtures_directory_contents Fixtures_directory
       end
     end
-    it "will exercise the exception catching capabilities of LoadDB.load" do
-      date = '1503031113'
-      dir = Dir.mktmpdir
-      filename = "#{dir}/news.#{date}.gz"
-      FileUtils.touch filename
-      allow(LoadDB).to receive(:parse_date) { raise Errno::ENOENT }
-      tty = `tty`.chomp!
-      Tempfile.create('foobarstuff') do |tmpfile|
-        $stderr.reopen(tmpfile, "w")
-        LoadDB.load(dir)
-        $stderr.reopen(tty, "w")
-        tmpfile_contents = File.readlines(tmpfile)
-        expect(tmpfile_contents.first).to match /^Missing filename /
+    context "exercise the exception handling of LoadDB.load" do
+      before(:context) do
+        @dir = Dir.mktmpdir
+        date = '1503031113'
+        filename = "#{@dir}/news.#{date}.gz"
+        FileUtils.touch filename
       end
+
+      it "will catch Errno::ENOENT" do
+        allow(LoadDB).to receive(:parse_date) { raise Errno::ENOENT }
+        stderr = capture_stderr { LoadDB.load(@dir) }
+        expect(stderr.first).to match /^Missing filename/
+      end
+
+      it "will catch NoMethodError" do
+        allow(LoadDB).to receive(:parse_date) { raise NoMethodError }
+        stderr = capture_stderr { LoadDB.load(@dir) }
+        expect(stderr.first).to match /Bad html tree/
+      end
+
+      it "will catch HackerNews::ElementNotFound" do
+        allow(LoadDB).to receive(:parse_date) { raise HackerNews::ElementNotFound }
+        stderr = capture_stderr { LoadDB.load(@dir) }
+        expect(stderr.first).to match /Bad HTML in file/
+      end
+
+      it "will catch HackerNews::ElementNotFound" do
+        allow(LoadDB).to receive(:parse_date) { raise HackerNews::BadHNId }
+        stderr = capture_stderr { LoadDB.load(@dir) }
+        expect(stderr.first).to match /Bad Hacker News ID/
+      end
+
+      it "will catch HackerNews::NothingToRead" do
+        allow(LoadDB).to receive(:parse_date) { raise HackerNews::NothingToRead }
+        stderr = capture_stderr { LoadDB.load(@dir) }
+        expect(stderr.first).to match /Empty input for file/
+      end
+
+      it "will catch HackerNews::InvalidFileName" do
+        allow(LoadDB).to receive(:parse_date) { raise HackerNews::InvalidFileName }
+        stderr = capture_stderr { LoadDB.load(@dir) }
+        expect(stderr.first).to match /Bad file name for file/
+      end
+
     end
   end
   describe "LoadDB.make_time" do
@@ -192,6 +233,14 @@ RSpec.describe LoadDB do
         expect(href).to eq "https://lists.debian.org/debian-devel-announce/2015/04/msg00005.html"
         expect(desc).to eq "Python 2, Python 3, Debian and Porting"
       end
+    end
+  end
+
+  context "LoadDB.update_db" do
+    it "exercise update_db" do
+      allow(HN).to receive(:process_latest_hn_num_one).and_return(:called)
+      allow(LoadDB).to receive(:make_time).and_return(nil)
+      expect(LoadDB.update_db(:dummy, :dummy, :dummy, :dummy)).to eq :called
     end
   end
 
