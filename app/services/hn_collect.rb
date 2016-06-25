@@ -4,17 +4,56 @@ require 'net/http'
 require 'net/https'
 require 'json'
 
+#require_relative 'hn_collect/cache'
+
 module HNCollect
+  include HNCollect::Cache
 
   class ServerUnavailable < StandardError; end
 
-  @cache = {
-    hn_id: nil,
-    description: nil,
-    href: nil
-  }
-
   extend self
+
+  def run
+    $stdout.sync = $stderr.sync = true
+    at_the_beginning_of_the_next_minute do
+      run_every_minute do
+        load_data_from_hackernews
+      end
+    end
+  rescue => e
+    log_error "HNCollect.run: unexpected exception #{e.inspect}; retrying"
+    Kernel.sleep 14
+    retry
+  end
+
+  def load_data_from_hackernews
+    time = Time.now
+    top_hit = get_top_hit
+    hn_id, description, href = get_top_hit_details(top_hit)
+    puts "#{time}: #{hn_id} '#{description}' '#{href}'"
+    HN.process_latest_hn_num_one(hn_id: hn_id, description: description, href: href, date: Time.now)
+  rescue ActiveRecord::RecordInvalid => e
+    log_error "Bad Data: #{e}"
+  rescue Net::ReadTimeout
+    log_error "Network Time out"
+  rescue Errno::ECONNREFUSED
+    log_error "connection refused"
+  rescue JSON::ParserError
+    log_error "bad JSON data returned"
+  rescue HNCollect::ServerUnavailable
+    log_error "server unavailable - retrying"
+    Kernel.sleep 5
+    retry
+  end
+
+  def run_every_minute
+    loop do
+      start_time = Time.now
+      yield
+      end_time = Time.now
+      sleep adjusted_delay(end_time, start_time)
+    end
+  end
 
   attr_accessor :HackerNewsURL
   attr_accessor :HackerNewsPort
@@ -26,22 +65,8 @@ module HNCollect
 
   @ReadTimeOut = 60
 
-  def story_cached?(hn_id)
-    @cache[:hn_id] == hn_id ? true : false
-  end
-
-  def update_cache(hn_id, description, href)
-    @cache[:hn_id] = hn_id
-    @cache[:description] = description
-    @cache[:href] = href
-  end
-
   def one_minute
     60
-  end
-
-  def last_top_story
-    return @cache.values_at(:hn_id, :description, :href)
   end
 
   def https_response_code_bad? code
@@ -85,38 +110,9 @@ module HNCollect
     [one_minute - (endtime - starttime).abs, 0].max
   end
 
-  def run_every_minute
-    loop do
-      start_time = Time.now
-      yield
-      end_time = Time.now
-      sleep adjusted_delay(end_time, start_time)
-    end
-  end
-
   def at_the_beginning_of_the_next_minute
     Kernel.sleep(60-Time.now.sec)
     yield
-  end
-
-  def load_data_from_hackernews
-    time = Time.now
-    top_hit = get_top_hit
-    hn_id, description, href = get_top_hit_details(top_hit)
-    puts "#{time}: #{hn_id} '#{description}' '#{href}'"
-    HN.process_latest_hn_num_one(hn_id: hn_id, description: description, href: href, date: Time.now)
-  rescue ActiveRecord::RecordInvalid => e
-    log_error "Bad Data: #{e}"
-  rescue Net::ReadTimeout
-    log_error "Network Time out"
-  rescue Errno::ECONNREFUSED
-    log_error "connection refused"
-  rescue JSON::ParserError
-    log_error "bad JSON data returned"
-  rescue HNCollect::ServerUnavailable
-    log_error "server unavailable - retrying"
-    Kernel.sleep 5
-    retry
   end
 
   # TODO put this in a more appropriate module.
@@ -124,16 +120,4 @@ module HNCollect
     Rails.logger.error "TOPHITSERROR #{msg}"
   end
 
-  def run
-    $stdout.sync = $stderr.sync = true
-    at_the_beginning_of_the_next_minute do
-      run_every_minute do
-        load_data_from_hackernews
-      end
-    end
-  rescue => e
-    log_error "HNCollect.run: unexpected exception #{e.inspect}; retrying"
-    Kernel.sleep 14
-    retry
-  end
 end

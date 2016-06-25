@@ -1,5 +1,5 @@
 
-require "#{Dir.pwd}/app/lib/load_db"
+require_relative "../../app/services/load_db"
 require 'tmpdir'
 require "spec_helper"
 require "rails_helper"
