@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "show_top_hits/show.html.haml", type: :view do
+RSpec.describe "top_hits/index.html.haml", type: :view do
   it "shows the top_hits in order" do
     stories = 0.upto(2).map do |i|
       story = create(:story)

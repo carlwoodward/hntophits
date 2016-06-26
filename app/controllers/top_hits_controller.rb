@@ -1,6 +1,6 @@
-class ShowTopHitsController < ApplicationController
+class TopHitsController < ApplicationController
 
-  def show
+  def index
     @top_hits = TopHit.recent_top_hits.page(params[:page])
   end
 
