@@ -1,0 +1,17 @@
+
+.row
+  .col-md-12
+    %p
+      Hacker News ID
+      %a(href="#{build_hacker_news_href(@story.hn_id)}")
+        = @story.hn_id
+    %p
+      Title
+      = @story.description
+    %p
+      URL
+      %a(href="#{@story.href}")
+        = @story.href
+    %p
+      Minutes spent in number one spot:
+      = @story.time_at_num_one
