@@ -1,0 +1,54 @@
+// Place all the styles related to the Stories controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.stories {
+  margin-bottom: 30px;
+  padding: 15px 15px 0 15px;
+  background-color: rgb(246, 246, 239);
+  font-size: 1.4em;
+  border-radius: 6px;
+  h2 {
+    margin: 0;
+    margin-bottom: 10px;
+    font-weight: 900;
+  }
+  p {
+    margin-bottom: 2px;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  ul li h2 {
+    margin-bottom: 0;
+  }
+  table {
+    margin-bottom: 5px;
+  }
+}
+
+.time-frame {
+  font-size: 0.5em;
+  font-weight: 100;
+  color: #7d7d78;
+}
+
+.underlined {
+  text-decoration: underline;
+}
+
+.story-time {
+  font-size: 0.8em;
+  color: #F88017;
+  padding-right: 5em;
+  min-width: 7em;
+}
+
+.story-duration {
+  font-size: 0.8em;
+  color: #F88017;
+  padding-right: 5em;
+  min-width: 5em;
+}
+

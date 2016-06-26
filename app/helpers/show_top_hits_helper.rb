@@ -1,2 +1,0 @@
-module ShowTopHitsHelper
-end

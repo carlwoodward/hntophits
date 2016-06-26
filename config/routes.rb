@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   concern :paginatable do
-    get '(page/:page)', :action => :show, :on => :collection, :as => ''
+    get '(page/:page)', :action => :index, :on => :collection, :as => ''
   end
 
-  resources :show_stories, :concerns => :paginatable
-  resources :show_top_hits
-  root "stories#index"
+  resources :stories, :concerns => :paginatable
+  resources :top_hits, :concerns => :paginatable
+  root "stories_front_page#index"
 end

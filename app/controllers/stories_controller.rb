@@ -1,6 +1,11 @@
 class StoriesController < ApplicationController
+
   def index
-    @top_hits = TopHit.get_recent_top_hits
-    @stories = Story.get_ordered_num_one_stories(params[:time_frame] || 'week')
+    @stories = Story.by_most_time.page(params[:page])
   end
+
+  def show
+    @stories = Story.by_most_time.page(params[:page])
+  end
+
 end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "stories/index.html.haml", type: :view do
+RSpec.describe "stories_front_page/index.html.haml", type: :view do
   it "shows the stories in order" do
     stories = 0.upto(2).map do |i|
       story = create(:story)
