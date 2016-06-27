@@ -3,6 +3,11 @@ require 'nokogiri'
 
 module LoadDB
 
+  class ElementNotFound < RuntimeError; end
+  class BadHNId < RuntimeError; end
+  class NothingToRead < RuntimeError; end
+  class InvalidFileName < RuntimeError; end
+
   # Given a directory name, return an Enumerator that will return each
   # file to be processes in time order (oldest first).
   def self.files(dir)
@@ -17,11 +22,11 @@ module LoadDB
   def self.valid_name filename
     filename = File.basename(filename)
     fields = filename.split(/\./)
-    raise HackerNews::InvalidFileName unless (fields.length == 2 or fields.length == 3)
+    raise InvalidFileName unless (fields.length == 2 or fields.length == 3)
     if filename =~ /^news\./ && fields[1] =~ /^\d{10}$/
       true
     else
-      raise HackerNews::InvalidFileName
+      raise InvalidFileName
     end
   end
 
@@ -74,12 +79,12 @@ module LoadDB
 
   def self.open_and_read_file(filename)
     lines = []
-    raise HackerNews::InvalidFileName unless valid_name(filename)
+    raise InvalidFileName unless valid_name(filename)
     openfile(filename) do |io|
       lines = io.readlines.join
     end
     if lines.empty? # gunzip failed / nothing to process
-      raise HackerNews::NothingToRead, "file '#{filename}' contained no data"
+      raise NothingToRead, "file '#{filename}' contained no data"
     else
       yield lines
     end
@@ -89,7 +94,7 @@ module LoadDB
     elem = Nokogiri::HTML(lines).css('tr > td.title > a').find do |elem|
       element_has_one_child_and_href_begins_with_http elem
     end
-    raise HackerNews::ElementNotFound unless elem
+    raise ElementNotFound unless elem
     begin # the evils of using exceptions for flow control.
       id_elem = elem.parent.parent.children[1].child.child['id'].sub('up_', '')
     rescue NoMethodError
@@ -100,7 +105,7 @@ module LoadDB
         child.name == 'a'
       end
     end
-    raise HackerNews::BadHNId unless valid_hn_id(id_elem)
+    raise BadHNId unless valid_hn_id(id_elem)
     return id_elem, elem['href'], elem.children[0].content
   end
 
@@ -134,13 +139,13 @@ module LoadDB
         warn "Bad html tree in filename #{filename}"
       rescue Errno::ENOENT => e
         warn "Missing filename #{filename}: #{e.message}"
-      rescue HackerNews::ElementNotFound => e
+      rescue ElementNotFound => e
         warn "Bad HTML in file #{filename}: #{e.message}"
-      rescue HackerNews::BadHNId => e
+      rescue BadHNId => e
         warn "Bad Hacker News ID found in file #{filename}: #{e.message}"
-      rescue HackerNews::NothingToRead => e
+      rescue NothingToRead => e
         warn "Empty input for file #{filename}: #{e.message}"
-      rescue HackerNews::InvalidFileName => e
+      rescue InvalidFileName => e
         warn "Bad file name for file #{filename}: #{e.message}"
       end
     end
