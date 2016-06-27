@@ -45,10 +45,10 @@ RSpec.describe LoadDB do
 
   describe 'LoadDB.valid_name' do
     it 'should be invalid because of missing prefix' do
-      expect{LoadDB.valid_name(Fixtures_directory + '/missing.1234567890')}.to raise_exception(HackerNews::InvalidFileName)
+      expect{LoadDB.valid_name(Fixtures_directory + '/missing.1234567890')}.to raise_exception(LoadDB::InvalidFileName)
     end
     it 'should be invalid because of missing/invalid date' do
-      expect{LoadDB.valid_name(Fixtures_directory + '/news.150303222')}.to raise_exception(HackerNews::InvalidFileName)
+      expect{LoadDB.valid_name(Fixtures_directory + '/news.150303222')}.to raise_exception(LoadDB::InvalidFileName)
     end
     it "should be valid because date is valid and there are enough fields and the date is valid" do
       expect(LoadDB.valid_name(Fixtures_directory + '/news.0123456789')).to be(true)
@@ -57,7 +57,7 @@ RSpec.describe LoadDB do
       expect(LoadDB.valid_name(Fixtures_directory + '/news.0123456789.gz')).to be(true)
     end
     it 'should be invalid because of too many fields' do
-      expect{LoadDB.valid_name(Fixtures_directory + '/news.0123456789.gz.gz')}.to raise_exception(HackerNews::InvalidFileName)
+      expect{LoadDB.valid_name(Fixtures_directory + '/news.0123456789.gz.gz')}.to raise_exception(LoadDB::InvalidFileName)
     end
   end
 
@@ -167,26 +167,26 @@ RSpec.describe LoadDB do
         expect(stderr.first).to match /Bad html tree/
       end
 
-      it "will catch HackerNews::ElementNotFound" do
-        allow(LoadDB).to receive(:parse_date) { raise HackerNews::ElementNotFound }
+      it "will catch ElementNotFound" do
+        allow(LoadDB).to receive(:parse_date) { raise LoadDB::ElementNotFound }
         stderr = capture_stderr { LoadDB.load(@dir) }
         expect(stderr.first).to match /Bad HTML in file/
       end
 
-      it "will catch HackerNews::ElementNotFound" do
-        allow(LoadDB).to receive(:parse_date) { raise HackerNews::BadHNId }
+      it "will catch ElementNotFound" do
+        allow(LoadDB).to receive(:parse_date) { raise LoadDB::BadHNId }
         stderr = capture_stderr { LoadDB.load(@dir) }
         expect(stderr.first).to match /Bad Hacker News ID/
       end
 
-      it "will catch HackerNews::NothingToRead" do
-        allow(LoadDB).to receive(:parse_date) { raise HackerNews::NothingToRead }
+      it "will catch NothingToRead" do
+        allow(LoadDB).to receive(:parse_date) { raise LoadDB::NothingToRead }
         stderr = capture_stderr { LoadDB.load(@dir) }
         expect(stderr.first).to match /Empty input for file/
       end
 
-      it "will catch HackerNews::InvalidFileName" do
-        allow(LoadDB).to receive(:parse_date) { raise HackerNews::InvalidFileName }
+      it "will catch InvalidFileName" do
+        allow(LoadDB).to receive(:parse_date) { raise LoadDB::InvalidFileName }
         stderr = capture_stderr { LoadDB.load(@dir) }
         expect(stderr.first).to match /Bad file name for file/
       end
@@ -207,14 +207,14 @@ RSpec.describe LoadDB do
       expect { LoadDB.open_and_read_file('news.1501010101') }.to raise_exception(Errno::ENOENT)
     end
     # XXX this is wrong; if the file doesn't exist the same exception should be thrown irrespective of the file name.
-    it "should throw and HackerNews::NothingToRead when the file name ends with .gz but the file doesn't exist" do
-      expect { LoadDB.open_and_read_file('news.1501010101.gz') }.to raise_exception(HackerNews::NothingToRead)
+    it "should throw and NothingToRead when the file name ends with .gz but the file doesn't exist" do
+      expect { LoadDB.open_and_read_file('news.1501010101.gz') }.to raise_exception(LoadDB::NothingToRead)
     end
   end
 
   describe "LoadDB.process_html_from_hacker_news" do
     it "should throw an exception because the html wasn't able to to be parsed" do
-      expect{ LoadDB.process_html_from_hacker_news("a") }.to raise_exception(HackerNews::ElementNotFound)
+      expect{ LoadDB.process_html_from_hacker_news("a") }.to raise_exception(LoadDB::ElementNotFound)
     end
   end
 
