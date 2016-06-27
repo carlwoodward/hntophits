@@ -1,6 +1,6 @@
 class Story < ActiveRecord::Base
 
-  has_many :top_hits
+  has_many :top_hits, dependent: :destroy
 
   validates :hn_id, numericality: { only_integer: true }
   validates :time_at_num_one, numericality: { only_integer: true }
