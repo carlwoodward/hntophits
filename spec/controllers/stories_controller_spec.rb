@@ -10,12 +10,20 @@ RSpec.describe StoriesController, type: :controller do
         story.save
         story
       end
-
       get :index
-
       expect(response).to have_http_status(:success)
       expect(response).to render_template(:index)
       expect(assigns(:stories)).to eq stories
+    end
+  end
+
+  describe "GET #show" do
+    it "execercise the show method of the stories controller" do
+      story = create(:story)
+      get :show, id: story.id
+      expect(response).to have_http_status(:success)
+      expect(response).to render_template(:show)
+      expect(assigns(:story)).to eq story
     end
   end
 
