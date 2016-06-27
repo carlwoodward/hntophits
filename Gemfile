@@ -34,6 +34,7 @@ gem "haml-rails", "~> 0.9"
 group :development do
   gem 'spring'
   gem 'pry-rails'
+  gem 'web-console'
 end
 
 # Use ActiveModel has_secure_password
