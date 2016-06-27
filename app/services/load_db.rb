@@ -9,6 +9,10 @@ module LoadDB
     Dir.glob("#{dir}/news.*.gz").map {|f| File.basename(f).split('.')[1] }.sort {|a, b| a <=> b}.map {|f| "#{dir}/news.#{f}.gz" }
   end
 
+  def self.valid_hn_id(elem)
+    String(elem) =~ /^\d+$/ ? true : false
+  end
+
   # If the filename starts with 'news.' and next has a valid date 'YYMMDDMMMM'
   def self.valid_name filename
     filename = File.basename(filename)
@@ -96,7 +100,7 @@ module LoadDB
         child.name == 'a'
       end
     end
-    raise HackerNews::BadHNId unless HN.valid_hn_id(id_elem)
+    raise HackerNews::BadHNId unless valid_hn_id(id_elem)
     return id_elem, elem['href'], elem.children[0].content
   end
 

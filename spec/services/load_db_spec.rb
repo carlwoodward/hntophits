@@ -255,5 +255,16 @@ RSpec.describe LoadDB do
     end
   end
 
+  describe 'LoadDB.valid_hn_id' do
+    it 'should be valid' do
+      expect(LoadDB.valid_hn_id(30)).to be true
+      expect(LoadDB.valid_hn_id(444)).to be true
+    end
+    it 'should not be valid' do
+      expect(LoadDB.valid_hn_id("fred")).to be false
+      expect(LoadDB.valid_hn_id("")).to be false
+    end
+  end
+
 end
 
