@@ -1,6 +1,5 @@
 
 require_relative "../../app/services/hn_collect"
-require_relative "../../app/services/hn_tools"
 
 require 'webrick'
 require 'webrick/https'
