@@ -24,6 +24,15 @@ def capture_stderr
   end
 end
 
+def with_no_stdout
+  tty = `tty`.chomp!
+  Tempfile.create('nostdout') do |tmpfile|
+    $stdout.reopen(tmpfile, "w")
+    yield
+    $stdout.reopen(tty, "w")
+  end
+end
+
 RSpec.describe LoadDB do
   describe 'LoadDB.files' do
     it 'will check that the fixtures directory exists' do
@@ -131,7 +140,9 @@ RSpec.describe LoadDB do
         expect(LoadDB).to receive(:update_db).with("9132815", "1503031112", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
         expect(LoadDB).to receive(:update_db).with("9132815", "1503031113", "https://www.unrealengine.com/blog/ue4-is-free", "Unreal Engine 4 is now available to everyone for free")
         expect(LoadDB).to receive(:update_db).with("9388502", "1504170600", "https://lists.debian.org/debian-devel-announce/2015/04/msg00005.html", "Python 2, Python 3, Debian and Porting")
-        LoadDB.load(Fixtures_directory)
+        with_no_stdout do
+          LoadDB.load(Fixtures_directory)
+        end
       ensure
         reset_fixtures_directory_contents Fixtures_directory
       end
