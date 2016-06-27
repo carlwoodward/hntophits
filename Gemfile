@@ -61,6 +61,8 @@ end
 group :test do
   gem 'database_cleaner'
   gem "simplecov"
+  gem 'pry-rails'
+  gem 'pry-doc'
 end
 
 gem 'unicorn'
