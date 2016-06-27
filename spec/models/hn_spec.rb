@@ -2,16 +2,6 @@
 require 'rails_helper'
 
 RSpec.describe HN, type: :model do
-  describe 'HN.valid_hn_id' do
-    it 'should be valid' do
-      expect(HN.valid_hn_id(30)).to be true
-      expect(HN.valid_hn_id(444)).to be true
-    end
-    it 'should not be valid' do
-      expect(HN.valid_hn_id("fred")).to be false
-      expect(HN.valid_hn_id("")).to be false
-    end
-  end
 
   context "process_latest_hn_num_one: there is a new story at the top" do
     it "should have a new story as number one in top_hits" do
