@@ -249,7 +249,7 @@ RSpec.describe LoadDB do
 
   context "LoadDB.update_db" do
     it "exercise update_db" do
-      allow(HN).to receive(:process_latest_hn_num_one).and_return(:called)
+      allow(HackerNews).to receive(:process_latest_hn_num_one).and_return(:called)
       allow(LoadDB).to receive(:make_time).and_return(nil)
       expect(LoadDB.update_db(:dummy, :dummy, :dummy, :dummy)).to eq :called
     end
