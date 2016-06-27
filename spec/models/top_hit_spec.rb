@@ -68,20 +68,20 @@ RSpec.describe TopHit, type: :model do
     end
   end
 
-  context "to test deal_with_top_hit" do
+  context "to test process_latest_top_story" do
     it "should create a record in the database" do
       expect(TopHit.count).to eq 0
-      TopHit.deal_with_top_hit(story_id: 1, date: Time.now)
+      TopHit.process_latest_top_story(story_id: 1, date: Time.now)
       expect(TopHit.count).to eq 1
     end
     it "should add new top hit" do
-      TopHit.deal_with_top_hit(story_id: 1, date: Time.now)
-      TopHit.deal_with_top_hit(story_id: 2, date: Time.now + 1.minute)
+      TopHit.process_latest_top_story(story_id: 1, date: Time.now)
+      TopHit.process_latest_top_story(story_id: 2, date: Time.now + 1.minute)
       expect(TopHit.current_top_hit.story_id).to eq 2
     end
     it "should not add a new top hit" do
-      TopHit.deal_with_top_hit(story_id: 1, date: Time.now)
-      TopHit.deal_with_top_hit(story_id: 1, date: Time.now + 1.minute)
+      TopHit.process_latest_top_story(story_id: 1, date: Time.now)
+      TopHit.process_latest_top_story(story_id: 1, date: Time.now + 1.minute)
       expect(TopHit.current_top_hit.story_id).to eq 1
       expect(TopHit.count).to eq 1
     end
