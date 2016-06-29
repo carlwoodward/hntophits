@@ -17,9 +17,9 @@ class TopHit < ActiveRecord::Base
     .order("x.date_seen desc")
   }
 
-  scope :get_recent_top_hits, -> {
-    recent_top_hits.limit(10)
-  }
+  scope :get_recent_top_hits, -> { recent_top_hits.limit(10) }
+
+  scope :top_hit, ->(story) { recent_top_hits.where("x.story_id = ?", story.id) }
 
   def self.current_top_hit
     # returns nil instead of activerecord::relation

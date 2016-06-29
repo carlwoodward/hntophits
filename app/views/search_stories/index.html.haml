@@ -1,0 +1,17 @@
+.row
+  .col-md-12
+    - if @stories.empty?
+      %p Nothing found.
+    - else
+      %table.table
+        %tr
+          - @stories.each do |story|
+            %tr
+              %td.story-time
+                %a(href="#{build_hacker_news_href(story.hn_id)}")
+                  = minutes_to_words(time_difference_between_now_and_date_last_num_one_in_minutes(story.top_hit.date_seen))
+              %td.story-duration
+                %a(href="#{build_hacker_news_href(story.hn_id)}") 
+                  = minutes_to_words(story.time_at_num_one) + ' ago'
+              %td
+                %a(href="#{story.href}") #{story.description}

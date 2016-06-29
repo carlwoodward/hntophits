@@ -17,6 +17,12 @@ class Story < ActiveRecord::Base
   scope :last_month, -> { newer_than_days(1.month.ago) }
   scope :all_time, -> { by_most_time }
 
+  scope :search, ->(string) { where("lower(description) like lower(?)", "%#{string}%") }
+
+  def top_hit
+    TopHit.top_hit(self).first
+  end
+
   def self.process(hn_id:, date:, href:, description:)
     story = Story.find_or_create_by!(hn_id: hn_id) do |r|
       r.href = href.blank? ? ApplicationHelper.build_hacker_news_href(hn_id) : href

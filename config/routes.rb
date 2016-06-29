@@ -6,5 +6,7 @@ Rails.application.routes.draw do
   resources :stories, :concerns => :paginatable, only: [ :index, :show ]
   resources :top_hits, :concerns => :paginatable, only: :index
 
+  resources :search_stories
+
   root "stories_front_page#index"
 end

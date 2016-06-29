@@ -20,4 +20,7 @@
                 Collecting stories since July 10 '15
               %li
                 %a(href='https://github.com/brucewoodward/hntophits') Top Hits Source code.
+              = form_tag search_stories_path, method: 'get' do
+                = text_field_tag :search, params[:search]
+                = submit_tag "Search"
       = yield
