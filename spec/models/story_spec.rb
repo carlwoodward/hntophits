@@ -85,6 +85,7 @@ RSpec.describe Story, type: :model do
           expect {
             Story.process(hn_id: "a string", date: Time.now, description: "description", href: nil)
           }.to raise_error(ActiveRecord::RecordInvalid)
+          expect(Story.count).to eq 0
         end
       end
 
@@ -94,6 +95,7 @@ RSpec.describe Story, type: :model do
           story = Story.process(hn_id: hn_id, date: Time.now, description: "description", href: nil)
           expect(story.valid?).to be true
           expect(story.href).to eq ApplicationHelper.build_hacker_news_href(hn_id)
+          expect(story.description).to eq "description"
         end
 
         it "will create href with the default" do
@@ -101,6 +103,7 @@ RSpec.describe Story, type: :model do
           story = Story.process(hn_id: hn_id, date: Time.now, description: "description", href: '')
           expect(story.valid?).to be true
           expect(story.href).to eq ApplicationHelper.build_hacker_news_href(hn_id)
+          expect(story.description).to eq "description"
         end
       end
 
@@ -109,6 +112,7 @@ RSpec.describe Story, type: :model do
           expect {
             Story.process(hn_id: "a string", date: Time.now, description: nil, href: nil)
           }.to raise_error(ActiveRecord::RecordInvalid)
+          expect(Story.count).to eq 0
         end
       end
     end

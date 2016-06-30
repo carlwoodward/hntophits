@@ -1,8 +1,13 @@
 class TopHit < ActiveRecord::Base
   belongs_to :story
 
-  validates :date_seen, presence: true
+  validates :date_seen, presence: true, date: { after: Proc.new { Time.new(1900) } }
   validates :story_id, numericality: { integer_only: true } 
+
+#  validates_each :date_seen do |record, attr, value|
+#    puts "value #{value.month}"
+#    value.acts_like?(:time)
+#  end
 
   scope :recent_top_hits, -> {
     select('"x".*')
@@ -31,7 +36,7 @@ class TopHit < ActiveRecord::Base
   #
   def self.process_latest_top_story(story_id:, date:)
     if new_story_at_top(story_id)
-      create(story_id: story_id, date_seen: date)
+      create!(story_id: story_id, date_seen: date)
     end
   end
 

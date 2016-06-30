@@ -22,10 +22,8 @@ class Story < ActiveRecord::Base
       r.href = href.blank? ? ApplicationHelper.build_hacker_news_href(hn_id) : href
       r.description = description
     end
-    if story
-      story.time_at_num_one += 1
-      story.save!
-    end
+    story.time_at_num_one += 1
+    story.save!
     story
   end
 
