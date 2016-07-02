@@ -10,16 +10,15 @@ class TopHit < ActiveRecord::Base
 #  end
 
   scope :recent_top_hits, -> {
-    select('"x".*')
-    .from("(select row_number() over (partition by story_id order by date_seen desc) as rn, " +
-          "id, story_id, date_seen, created_at, updated_at from top_hits) x")
-    .where("x.rn = 1")
-    .order("x.date_seen desc")
+    select('*')
+    .from("(select *, rank() over (partition by story_id order by date_seen desc) from top_hits) subquery")
+    .where("rank = 1")
+    .order("date_seen desc")
   }
 
   scope :get_recent_top_hits, -> { recent_top_hits.limit(10) }
 
-  scope :top_hit, ->(story) { recent_top_hits.where("x.story_id = ?", story.id) }
+  scope :top_hit, ->(story) { recent_top_hits.where("story_id = ?", story.id) }
 
   def self.current_top_hit
     # returns nil instead of activerecord::relation
