@@ -67,3 +67,4 @@ end
 
 gem 'unicorn'
 gem 'date_validator'
+gem 'active_type'
