@@ -18,7 +18,7 @@ RSpec.describe HackerNews do
 
   context "process_latest_hn_num_one: there isn't new story at the top" do
     it "should have added more time to the current top story in top_hits" do
-      current_top_story = create(:story, hn_id: 656565)
+      current_top_story = create(:story, hn_id: 656565, time_at_num_one: 1)
       create(:top_hit, :story => current_top_story, date_seen: Time.now)
       expect(current_top_story.time_at_num_one).to eq 1
       HackerNews.process_latest_hn_num_one(hn_id: current_top_story.hn_id, date: Time.now,
@@ -34,7 +34,7 @@ RSpec.describe HackerNews do
 
   context "simulate the current story getting more time at number one followed by a new story entering the picture" do
     it "should have a new story as number one in top_hits" do
-      current_top_story = create(:story, hn_id: 656565)
+      current_top_story = create(:story, hn_id: 656565, time_at_num_one: 1)
       create(:top_hit, :story => current_top_story, date_seen: Time.now)
       HackerNews.process_latest_hn_num_one(hn_id: current_top_story.hn_id, date: Time.now,
                                    href: current_top_story.href, description: current_top_story.description)
