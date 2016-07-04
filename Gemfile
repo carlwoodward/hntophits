@@ -33,7 +33,6 @@ gem "haml-rails", "~> 0.9"
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 group :development do
   gem 'spring'
-  gem 'pry-rails'
   gem 'web-console'
 end
 
@@ -57,13 +56,13 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.2'
   gem 'factory_girl_rails', '~> 4'
   gem 'capybara'
+  gem 'pry-rails'
+  gem 'pry-doc'
 end
 
 group :test do
   gem 'database_cleaner'
   gem "simplecov"
-  gem 'pry-rails'
-  gem 'pry-doc'
 end
 
 gem 'unicorn'
