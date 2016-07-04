@@ -18,7 +18,6 @@ class Story < ActiveRecord::Base
   scope :last_month, -> { newer_than_days(1.month.ago) }
   scope :all_time, -> { by_most_time }
 
-  scope :search_description, -> (search_string) { where("description ~* '\\m" + search_string + "\\M'") }
   scope :time_at_num_one, -> (direction) { order(time_at_num_one: direction) }
 
   def top_hit
