@@ -27,7 +27,7 @@ class SearchStory < ActiveType::Object
     direction = check_direction(direction)
     query = <<-SQL
       with
-      s as (select id, hn_id, href, description, time_at_num_one from stories where lower(description) like lower('%' || ? || '%')),
+      s as (select id, hn_id, href, description, time_at_num_one from stories where description ~* '\\m#{search_string}\\M'),
       t as (select * from (select top_hits.story_id, top_hits.date_seen, rank() over (partition by story_id order by date_seen desc) from top_hits) subquery where rank = 1)
       select s.id, s.hn_id, s.description, s.time_at_num_one, s.href, t.date_seen from s join t on s.id = t.story_id
       order by t.date_seen

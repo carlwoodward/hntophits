@@ -13,6 +13,12 @@ class SearchStoriesController < ApplicationController
     @search_string = params.require(:search_string)
     @order_column_name = params.require(:order_column_name)
     @order_direction = params.require(:order_direction)
+    sanitise_search_string
+  end
+
+  def sanitise_search_string
+    @search_string.gsub!(/[^[[:alnum:]]]/,'')
+    logger.debug "@search_string #{@search_string}"
   end
 
 end
