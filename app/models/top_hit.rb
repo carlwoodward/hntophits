@@ -4,11 +4,6 @@ class TopHit < ActiveRecord::Base
   validates :date_seen, presence: true, date: { after: Proc.new { Time.new(1900) } }
   validates :story_id, numericality: { integer_only: true } 
 
-#  validates_each :date_seen do |record, attr, value|
-#    puts "value #{value.month}"
-#    value.acts_like?(:time)
-#  end
-
   scope :recent_top_hits, -> {
     select('*')
     .from("(select *, rank() over (partition by story_id order by date_seen desc) from top_hits) subquery")

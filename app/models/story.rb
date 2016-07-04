@@ -8,8 +8,9 @@ class Story < ActiveRecord::Base
   validates :description, presence: true
   validates_uniqueness_of :hn_id
 
-  scope :last_seen, -> { order(:updated_at => :desc) }
-  scope :most_time_at_number_one, -> { order(:time_at_num_one => :desc) }
+  #scope :last_seen, -> (direction) { order(updated_at: direction) }
+  scope :last_seen, -> { order(updated_at: :desc) }
+  scope :most_time_at_number_one, -> { order(time_at_num_one: :desc) }
 
   scope :by_most_time, -> { order(time_at_num_one: :desc).limit(10) }
   scope :newer_than_days, ->(days) { where('updated_at > ?', days).by_most_time }
@@ -17,7 +18,8 @@ class Story < ActiveRecord::Base
   scope :last_month, -> { newer_than_days(1.month.ago) }
   scope :all_time, -> { by_most_time }
 
-  scope :search, ->(string) { where("lower(description) like lower(?)", "%#{string}%") }
+  scope :search_description, -> (search_string) { where("lower(description) like lower(?)", "%#{search_string}%") }
+  scope :time_at_num_one, -> (direction) { order(time_at_num_one: direction) }
 
   def top_hit
     TopHit.top_hit(self).first

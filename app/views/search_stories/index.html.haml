@@ -1,17 +1,27 @@
 .row
   .col-md-12
     - if @stories.empty?
-      %p Nothing found.
+      .text-center
+        %p Nothing found.
     - else
-      %table.table
-        %tr
+      .stories
+        %table.table
+          %thead
+            %tr
+              %th
+                = link_to "Last Seen", action: :index, order_direction: @search_story.order_direction, search_string: @search_story.search_string, order_column_name: 'last_seen'
+              %th
+                = link_to "Time at #1", action: :index, order_direction: @search_story.order_direction, search_string: @search_story.search_string, order_column_name: 'time_at_num_one'
+              %th
+                Story
+          %tbody
           - @stories.each do |story|
             %tr
               %td.story-time
                 %a(href="#{build_hacker_news_href(story.hn_id)}")
-                  = minutes_to_words(time_difference_between_now_and_date_last_num_one_in_minutes(story.top_hit.date_seen))
+                  = minutes_to_words(time_difference_between_now_and_date_last_num_one_in_minutes(story.date_seen)) + ' ago'
               %td.story-duration
                 %a(href="#{build_hacker_news_href(story.hn_id)}") 
-                  = minutes_to_words(story.time_at_num_one) + ' ago'
+                  = minutes_to_words(story.time_at_num_one)
               %td
                 %a(href="#{story.href}") #{story.description}
