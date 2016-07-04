@@ -12,7 +12,7 @@ RSpec.feature "SearchPageFeatures", type: :feature do
   context "found some search results" do
     before(:each) do
       @descriptions = [ 'dummy description', 'find this one - ruby', 'ignore this one' ]
-      @stories = 3.times.map  { |i| create(:story, description: @descriptions[i], time_at_num_one: i*2) }
+      @stories = 3.times.map  { |i| create(:story, description: @descriptions[i], time_at_num_one: i*2, href: "stories href #{i}") }
       @top_hits = []
       @top_hits << create(:top_hit, story_id: @stories[0].id, date_seen: Time.now - 5.minutes)
       @top_hits << create(:top_hit, story_id: @stories[1].id, date_seen: Time.now - 2.minutes)
