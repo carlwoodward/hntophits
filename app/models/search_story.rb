@@ -15,7 +15,7 @@ class SearchStory < ActiveType::Object
     end
   end
 
-  def self.search_description_order_by_top_at_num_one(search_string, direction=:desc)
+  def self.search_description_order_by_time_at_num_one(search_string, direction=:desc)
     direction = check_direction(direction)
     Story.where(search_text(search_string)).order(time_at_num_one: direction).map do |r|
       new(id: r.id, hn_id: r.hn_id, description: r.description, href: r.href,
@@ -33,7 +33,7 @@ class SearchStory < ActiveType::Object
       order by t.date_seen
     SQL
     query += direction.to_s
-    connection.exec_query(sanitize_sql([query, search_string])).map do |r|
+    connection.exec_query(sanitize_sql(query)).map do |r|
       new(id: r["id"], hn_id: r["hn_id"], description: r["description"],
           time_at_num_one: r["time_at_num_one"], date_seen: r["date_seen"])
     end
