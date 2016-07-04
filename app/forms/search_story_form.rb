@@ -12,7 +12,7 @@ class SearchStoryForm < ActiveType::Object
     when nil
       SearchStory.search_description(self.search_string)
     when "time_at_num_one"
-      SearchStory.search_description_order_by_top_at_num_one(self.search_string, self.order_direction.to_sym)
+      SearchStory.search_description_order_by_time_at_num_one(self.search_string, self.order_direction.to_sym)
     when "last_seen"
       SearchStory.search_description_order_by_date_seen(self.search_string, self.order_direction.to_sym)
     else
