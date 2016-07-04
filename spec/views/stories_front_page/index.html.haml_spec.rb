@@ -15,6 +15,7 @@ RSpec.describe "stories_front_page/index.html.haml", type: :view do
 
     assign(:top_hits, tophits)
     assign(:stories, stories)
+    assign(:search_story, SearchStory.new)
 
     render
 
