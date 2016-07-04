@@ -36,7 +36,8 @@ class SearchStory < ActiveType::Object
     SQL
     connection.exec_query(sanitize_sql(query)).map do |r|
       new(id: r["id"], hn_id: r["hn_id"], description: r["description"],
-          time_at_num_one: r["time_at_num_one"], date_seen: r["date_seen"])
+          time_at_num_one: r["time_at_num_one"], date_seen: r["date_seen"],
+          href: r["href"])
     end
   end
 
