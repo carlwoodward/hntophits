@@ -18,7 +18,6 @@ class SearchStoriesController < ApplicationController
 
   def sanitise_search_string
     @search_string.gsub!(/[^[[:alnum:]]]/,'')
-    logger.debug "@search_string #{@search_string}"
   end
 
 end
