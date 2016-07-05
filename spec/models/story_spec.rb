@@ -67,6 +67,7 @@ RSpec.describe Story, type: :model do
   end
 
   context "exercise self.process" do
+
     context "successful use" do
       it "will return story that has been populated as expected (correctly)" do
         date = Time.now
@@ -76,6 +77,22 @@ RSpec.describe Story, type: :model do
         expect(story.hn_id).to eq 1
         expect(story.description).to eq description
         expect(story.href).to eq href
+      end
+    end
+
+    context "the story exists but the description has changed" do
+      it "will update the story with the new description" do
+        story = create(:story, hn_id: 1, description: "original description")
+        Story.process(hn_id: 1, date: Time.now, href: "https//nowhere.com", description: "new description")
+        expect(Story.first.description).to eq "new description"
+      end
+    end
+
+    context "the story doesn't exist before processsing and it's description is stored as provided" do
+      it "will find that the description is as provided" do
+        story = create(:story, hn_id: 1, description: "original description")
+        Story.process(hn_id: 1, date: Time.now, href: "https//nowhere.com", description: "original description")
+        expect(Story.first.description).to eq "original description"
       end
     end
 
