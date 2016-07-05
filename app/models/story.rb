@@ -29,6 +29,7 @@ class Story < ActiveRecord::Base
       r.href = href.blank? ? ApplicationHelper.build_hacker_news_href(hn_id) : href
       r.description = description
     end
+    story.description = description if story.description != description
     story.time_at_num_one += 1
     story.save!
     story
