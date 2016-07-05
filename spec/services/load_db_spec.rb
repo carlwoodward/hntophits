@@ -147,6 +147,7 @@ RSpec.describe LoadDB do
         reset_fixtures_directory_contents Fixtures_directory
       end
     end
+
     context "exercise the exception handling of LoadDB.load" do
       before(:context) do
         @dir = Dir.mktmpdir
@@ -193,6 +194,7 @@ RSpec.describe LoadDB do
 
     end
   end
+
   describe "LoadDB.make_time" do
     it "simple date conversion" do
       expect(LoadDB.make_time('1410120834')).to eq Time.new(2014, 10, 12, 8, 34, 0)
@@ -208,7 +210,7 @@ RSpec.describe LoadDB do
     end
     # XXX this is wrong; if the file doesn't exist the same exception should be thrown irrespective of the file name.
     it "should throw and NothingToRead when the file name ends with .gz but the file doesn't exist" do
-      expect { LoadDB.open_and_read_file('news.1501010101.gz') }.to raise_exception(LoadDB::NothingToRead)
+      expect { LoadDB.open_and_read_file('news.1501010101.gz') }.to raise_exception(Errno::ENOENT)
     end
   end
 
