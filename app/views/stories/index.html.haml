@@ -6,5 +6,5 @@
         %tr
         - @stories.each do |story|
           %tr
-            = render :partial => 'stories/story', :locals => { :story => story, :past_tense => false }
+            = render partial: 'stories/story', locals: { story: story, past_tense: false }
     = paginate @stories

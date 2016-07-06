@@ -1,8 +1,8 @@
 !!!
 %html
   %head
-    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
-    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1"}/
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1"}/
     %title HNTopHits
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
@@ -13,7 +13,7 @@
         .row
           .col-md-8
             %h1
-              = link_to 'Hacker News Top Hits', :controller => :stories_front_page
+              = link_to 'Hacker News Top Hits', controller: :stories_front_page
           .col-md-4
             %ul.what-is-info
               %li
