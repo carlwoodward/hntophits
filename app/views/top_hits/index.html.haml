@@ -5,5 +5,5 @@
       %table.table
         - @top_hits.each do |tophit|
           %tr
-            = render :partial => 'stories/tophit', :locals => { :tophit => tophit }
+            = render partial: 'stories/tophit', locals: { tophit: tophit }
     = paginate @top_hits

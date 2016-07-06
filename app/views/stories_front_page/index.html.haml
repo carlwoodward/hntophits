@@ -7,7 +7,7 @@
         %table.table.table-condensed
           - @top_hits.each do |tophit|
             %tr
-              = render :partial => 'stories/tophit', :locals => { :tophit => tophit }
+              = render partial: 'stories/tophit', locals: { tophit: tophit }
   .loved_stories
     .col-md-6
       .stories
@@ -17,13 +17,13 @@
               = link_to 'Time spent at #1', url_for(stories_path)
           %li.pull-right.time-frame
             %ul.list-inline
-              %li.h5{:class => ('underlined' if !params.has_key?(:time_frame) || params[:time_frame] == 'week')}
-                = link_to 'this week', :controller => 'stories_front_page', :action => :index, :time_frame => 'week'
-              %li.h5{:class => ('underlined' if params.has_key?(:time_frame) && params[:time_frame] == 'month')}
-                = link_to 'this month', :controller => 'stories_front_page', :action => :index, :time_frame => 'month'
-              %li.h5{:class => ('underlined' if params.has_key?(:time_frame) && params[:time_frame] == 'alltime')}
-                = link_to 'all time', :controller => 'stories_front_page', :action => :index, :time_frame => 'alltime'
+              %li.h5{class: ('underlined' if !params.has_key?(:time_frame) || params[:time_frame] == 'week')}
+                = link_to 'this week', controller: 'stories_front_page', action: :index, time_frame: 'week'
+              %li.h5{class: ('underlined' if params.has_key?(:time_frame) && params[:time_frame] == 'month')}
+                = link_to 'this month', controller: 'stories_front_page', action: :index, time_frame: 'month'
+              %li.h5{class: ('underlined' if params.has_key?(:time_frame) && params[:time_frame] == 'alltime')}
+                = link_to 'all time', controller: 'stories_front_page', action: :index, time_frame: 'alltime'
         %table.table
           - @stories.each do |story|
             %tr
-              = render :partial => 'stories/story', :locals => { :story => story, :past_tense => false }
+              = render partial: 'stories/story', locals: { story: story, past_tense: false }

@@ -21,8 +21,8 @@ class TestWebServer
       $stdout.reopen('/dev/null', 'w+')
       $stderr.reopen('/dev/null', 'w+')
       server = WEBrick::HTTPServer.new(
-        :Port => 8080, :SSLEnable => true, :SSLCertName => @cert_name,
-        :Logger => @logger)
+        Port: 8080, SSLEnable: true, SSLCertName: @cert_name,
+        Logger: @logger)
 
       setup_mounts server
       Signal.trap('TERM') { server.shutdown }
