@@ -44,6 +44,9 @@ RSpec.feature "SearchPageFeatures", type: :feature do
       elements = page.all('table tr', text: /one/)
       expect(elements[0].text).to match(/find this one/)
       expect(elements[1].text).to match(/ignore this one/)
+      #expect(find_link('
+      expect(page).to have_link('find this one - ruby', href: 'stories href 1')
+      expect(page).to have_link('ignore this one', href: 'stories href 2')
     end
 
     it "will exercise the clicking of the 'Time at #1' link" do
@@ -63,6 +66,8 @@ RSpec.feature "SearchPageFeatures", type: :feature do
       elements = page.all('table tr', text: /one/)
       expect(elements[0].text).to match(/ignore this one/)
       expect(elements[1].text).to match(/find this one/)
+      expect(page).to have_link('find this one - ruby', href: 'stories href 1')
+      expect(page).to have_link('ignore this one', href: 'stories href 2')
     end
 
   end
