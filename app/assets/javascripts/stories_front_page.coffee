@@ -40,5 +40,5 @@ do ->
 
   # Load this code from a turbolinks event.
   $(document).on('page:change', ->
-    return unless $(".stories_front_page").length > 0
+    return unless $(".stories_front_page_controller").length > 0
     highlight_new_stories())
