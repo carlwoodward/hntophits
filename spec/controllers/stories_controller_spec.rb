@@ -20,7 +20,7 @@ RSpec.describe StoriesController, type: :controller do
   describe "GET #show" do
     it "execercise the show method of the stories controller" do
       story = create(:story)
-      get :show, id: story.id
+      get :show, params: { id: story.id }
       expect(response).to have_http_status(:success)
       expect(response).to render_template(:show)
       expect(assigns(:story)).to eq story

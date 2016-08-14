@@ -1,4 +1,4 @@
-class TopHit < ActiveRecord::Base
+class TopHit < ApplicationRecord
   belongs_to :story
 
   validates :date_seen, presence: true, date: { after: Proc.new { Time.new(1900) } }

@@ -111,7 +111,7 @@ RSpec.describe Story, type: :model do
           hn_id = 1
           story = Story.process(hn_id: hn_id, date: Time.now, description: "description", href: nil)
           expect(story.valid?).to be true
-          expect(story.href).to eq ApplicationHelper.build_hacker_news_href(hn_id)
+          expect(story.href).to eq HackerNews.build_hacker_news_href(hn_id)
           expect(story.description).to eq "description"
         end
 
@@ -119,7 +119,7 @@ RSpec.describe Story, type: :model do
           hn_id = 1
           story = Story.process(hn_id: hn_id, date: Time.now, description: "description", href: '')
           expect(story.valid?).to be true
-          expect(story.href).to eq ApplicationHelper.build_hacker_news_href(hn_id)
+          expect(story.href).to eq HackerNews.build_hacker_news_href(hn_id)
           expect(story.description).to eq "description"
         end
       end

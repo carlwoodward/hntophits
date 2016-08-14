@@ -34,7 +34,7 @@ class SearchStory < ActiveType::Object
       select s.id, s.hn_id, s.description, s.time_at_num_one, s.href, t.date_seen from s join t on s.id = t.story_id
       order by #{order_column_name} #{order_direction.to_s}
     SQL
-    connection.exec_query(sanitize_sql(query)).map do |r|
+    Story.connection.exec_query(sanitize_sql(query)).map do |r|
       new(id: r["id"], hn_id: r["hn_id"], description: r["description"],
           time_at_num_one: r["time_at_num_one"], date_seen: r["date_seen"],
           href: r["href"])

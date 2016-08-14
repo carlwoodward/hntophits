@@ -1,4 +1,4 @@
-class Story < ActiveRecord::Base
+class Story < ApplicationRecord
 
   has_many :top_hits, dependent: :destroy
 
@@ -26,7 +26,7 @@ class Story < ActiveRecord::Base
 
   def self.process(hn_id:, date:, href:, description:)
     story = Story.find_or_create_by!(hn_id: hn_id) do |r|
-      r.href = href.blank? ? ApplicationHelper.build_hacker_news_href(hn_id) : href
+      r.href = href.blank? ? HackerNews.build_hacker_news_href(hn_id) : href
       r.description = description
     end
     story.description = description if story.description != description
