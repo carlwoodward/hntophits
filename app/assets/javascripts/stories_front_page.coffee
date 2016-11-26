@@ -13,7 +13,8 @@ do ->
     return id if id.match(numbers_only)
     return
 
-  store = (ids) -> localStorage.setItem(storage_key, JSON.stringify(ids))
+  store = (ids) ->
+    localStorage.setItem(storage_key, JSON.stringify(ids))
 
   get_hn_ids_from_localstore = ->
     ids_map = {}
@@ -24,7 +25,8 @@ do ->
   update_store_with_current_ids = (ids) ->
     localStorage.setItem(storage_key, JSON.stringify(ids))
 
-  local_storage_isnt_available = -> typeof(Storage) == "undefined"
+  local_storage_isnt_available = ->
+    typeof(Storage) == "undefined"
 
   highlight_new_stories = ->
     return true if local_storage_isnt_available()
