@@ -1,5 +1,6 @@
-%td.story-duration
-  %a(href="#{build_hacker_news_href(story.hn_id)}") 
-    = minutes_to_words(story.time_at_num_one) + (past_tense ? ' ago' : '')
-%td.story-link
-  %a(href="#{story.href}") #{story.description}
+%p
+  %span.story-duration
+    %a(href="#{build_hacker_news_href(story.hn_id)}") 
+      = minutes_to_words(story.time_at_num_one) + (past_tense ? ' ago' : '')
+  %span.story-link
+    %a(href="#{story.href}") #{story.description}

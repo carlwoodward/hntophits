@@ -5,7 +5,7 @@
 .stories {
   margin-bottom: 30px;
   padding: 15px 15px 0 15px;
-  background-color: rgb(246, 246, 239);
+  background-color: #fff;
   font-size: 1.4em;
   border-radius: 6px;
   h2 {
@@ -14,7 +14,7 @@
     font-weight: 900;
   }
   p {
-    margin-bottom: 2px;
+    margin-bottom: 0.3em;
   }
   a {
     text-decoration: none;
@@ -25,6 +25,10 @@
   }
   table {
     margin-bottom: 5px;
+    
+    tr .story-time {
+      border: 0;
+    }
   }
 }
 
@@ -40,15 +44,15 @@
 
 .story-time {
   font-size: 0.8em;
-  color: #F88017;
-  padding-right: 5em;
-  min-width: 7em;
+  color: grey;
+  padding-right: 1em;
+  padding-bottom: 0.4em;
 }
 
 .story-duration {
   font-size: 0.8em;
-  color: #F88017;
-  padding-right: 5em;
-  min-width: 5em;
+  color: grey;
+  padding-right: 1em;
+  padding-bottom: 0.4em;
 }
 

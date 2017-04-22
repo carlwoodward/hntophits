@@ -1,5 +1,6 @@
-%td.story-time
-  %a(href="#{build_hacker_news_href(tophit.story.hn_id)}")
-    = minutes_to_words(time_difference_between_now_and_date_last_num_one_in_minutes(tophit.date_seen)) + ' ago'
-%td.story-link
-  %a(href="#{tophit.story.href}") #{tophit.story.description}
+%p
+  %span.story-time
+    %a(href="#{build_hacker_news_href(tophit.story.hn_id)}")
+      = minutes_to_words(time_difference_between_now_and_date_last_num_one_in_minutes(tophit.date_seen)) + ' ago'
+  %span.story-link
+    %a(href="#{tophit.story.href}") #{tophit.story.description}

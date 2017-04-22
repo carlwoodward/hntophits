@@ -4,10 +4,8 @@
       .stories
         %h2
           = link_to 'Recent Top Hits', url_for(top_hits_path)
-        %table.table.table-condensed
-          - @top_hits.each do |tophit|
-            %tr
-              = render partial: 'stories/tophit', locals: { tophit: tophit }
+        - @top_hits.each do |tophit|
+          = render partial: 'stories/tophit', locals: { tophit: tophit }
   .loved_stories
     .col-md-6
       .stories
@@ -18,11 +16,11 @@
           %li.pull-right.time-frame
             %ul.list-inline
               %li.h5{class: ('underlined' if !params.has_key?(:time_frame) || params[:time_frame] == 'week')}
-                = link_to 'this week', controller: 'stories_front_page', action: :index, time_frame: 'week'
+                = link_to 'Week', controller: 'stories_front_page', action: :index, time_frame: 'week'
               %li.h5{class: ('underlined' if params.has_key?(:time_frame) && params[:time_frame] == 'month')}
-                = link_to 'this month', controller: 'stories_front_page', action: :index, time_frame: 'month'
+                = link_to 'Month', controller: 'stories_front_page', action: :index, time_frame: 'month'
               %li.h5{class: ('underlined' if params.has_key?(:time_frame) && params[:time_frame] == 'alltime')}
-                = link_to 'all time', controller: 'stories_front_page', action: :index, time_frame: 'alltime'
+                = link_to 'All', controller: 'stories_front_page', action: :index, time_frame: 'alltime'
         %table.table
           - @stories.each do |story|
             %tr

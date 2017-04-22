@@ -2,9 +2,6 @@
   .col-md-12
     .stories
       %h2 Most time spent at #1
-      %table.table
-        %tr
-        - @stories.each do |story|
-          %tr
-            = render partial: 'stories/story', locals: { story: story, past_tense: false }
+      - @stories.each do |story|
+        = render partial: 'stories/story', locals: { story: story, past_tense: false }
     = paginate @stories
