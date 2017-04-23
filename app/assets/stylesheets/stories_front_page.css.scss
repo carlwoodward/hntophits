@@ -43,16 +43,18 @@
 }
 
 .story-time {
+  display: inline-block;
   font-size: 0.8em;
   color: grey;
-  padding-right: 1em;
   padding-bottom: 0.4em;
+  min-width: 7em;
 }
 
 .story-duration {
+  display: inline-block;
   font-size: 0.8em;
   color: grey;
-  padding-right: 1em;
   padding-bottom: 0.4em;
+  min-width: 5em;
 }
 
