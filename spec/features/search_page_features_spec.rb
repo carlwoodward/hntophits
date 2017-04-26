@@ -23,8 +23,8 @@ RSpec.feature "SearchPageFeatures", type: :feature do
       visit("/")
       fill_in('search_string', with: 'ruby')
       click_button('Search')
-      expect(page.has_css?('tr', count: 2)).to be true # the heading and one match.
-      expect(all('table tr', text: 'find this one - ruby').count).to eq 1
+      expect(page.has_css?('.stories p', count: 1)).to be true # the heading and one match.
+      expect(all('.stories p .story-link', text: 'find this one - ruby').count).to eq 1
     end
 
     it "will exercise the clicking of the 'Last Seen' link" do
@@ -32,16 +32,16 @@ RSpec.feature "SearchPageFeatures", type: :feature do
       fill_in('search_string', with: 'one')
       click_button('Search')
       # The first time the order is descending on time_at_num_one
-      expect(page.has_css?('tr', count: 3)).to be true # the heading and one match.
-      expect(page.all('table tr', text: /one/).count).to eq 2
+      expect(page.has_css?('.stories p', count: 2)).to be true # the heading and one match.
+      expect(page.all('.stories p .story-link', text: /one/).count).to eq 2
       # The first click on the "Last Seen" button lists the stories in descending order on 'last seen' field
       click_link('Last Seen')
-      elements = page.all('table tr', text: /one/)
+      elements = page.all('.stories p .story-link', text: /one/)
       expect(elements[0].text).to match(/ignore this one/)
       expect(elements[1].text).to match(/find this one/)
       # The second click on the "Last Seen" button lists the stories in ascending order on 'last seen' field
       click_link('Last Seen')
-      elements = page.all('table tr', text: /one/)
+      elements = page.all('.stories p .story-link', text: /one/)
       expect(elements[0].text).to match(/find this one/)
       expect(elements[1].text).to match(/ignore this one/)
       #expect(find_link('
@@ -54,16 +54,16 @@ RSpec.feature "SearchPageFeatures", type: :feature do
       fill_in('search_string', with: 'one')
       click_button('Search')
       # The first time the order is descending on time_at_num_one
-      expect(page.has_css?('tr', count: 3)).to be true # the heading and one match.
-      expect(page.all('table tr', text: /one/).count).to eq 2
+      expect(page.has_css?('.stories p', count: 2)).to be true # the heading and one match.
+      expect(page.all('.stories p .story-link', text: /one/).count).to eq 2
       # The first click on the "Last Seen" button lists the stories in descending order on 'last seen' field
       click_link('Time at #1')
-      elements = page.all('table tr', text: /one/)
+      elements = page.all('.stories p .story-link', text: /one/)
       expect(elements[0].text).to match(/find this one/)
       expect(elements[1].text).to match(/ignore this one/)
       # The second click on the "Last Seen" button lists the stories in ascending order on 'last seen' field
       click_link('Time at #1')
-      elements = page.all('table tr', text: /one/)
+      elements = page.all('.stories p .story-link', text: /one/)
       expect(elements[0].text).to match(/ignore this one/)
       expect(elements[1].text).to match(/find this one/)
       expect(page).to have_link('find this one - ruby', href: 'stories href 1')

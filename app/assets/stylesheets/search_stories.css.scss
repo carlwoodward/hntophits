@@ -1,3 +1,30 @@
 // Place all the styles related to the SearchStories controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.search-header {
+  padding-left: 1em;
+  font-weight: bold;
+  font-size: 1.2em;
+  a {
+    color: black;
+  }
+  p {
+    margin-top: 15px;
+    margin-bottom: -9px;
+  }
+}
+
+.heading.last-seen a {
+  display: inline-block;
+  min-width: 6.5em;
+}
+
+.heading.time-at-num-one a {
+  display: inline-block;
+  min-width: 4.5em;
+}
+
+.heading.description {
+  padding-left: 5em;
+}
