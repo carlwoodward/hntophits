@@ -19,16 +19,16 @@ RSpec.describe "stories_front_page/index.html.haml", type: :view do
 
     render
 
-    top_hits = assert_select(".recent_top_hits tr td")
-    expect(top_hits.length).to be 6
+    top_hits = assert_select(".recent_top_hits p")
+    expect(top_hits.length).to be 3
     expect(top_hits[0].children[1].to_s).to match(/^1 min ago$/)
-    expect(top_hits[2].children[1].to_s).to match(/^2 mins ago$/)
-    expect(top_hits[4].children[1].to_s).to match(/^3 mins ago$/)
+    expect(top_hits[1].children[1].to_s).to match(/^2 mins ago$/)
+    expect(top_hits[2].children[1].to_s).to match(/^3 mins ago$/)
 
-    stories = assert_select(".loved_stories tr td") 
-    expect(stories.length).to be 6
+    stories = assert_select(".loved_stories p") 
+    expect(stories.length).to be 3
     expect(stories[0].children[1].to_s).to match(/^2 mins$/)
+    expect(stories[1].children[1].to_s).to match(/^1 min$/)
     expect(stories[2].children[1].to_s).to match(/^1 min$/)
-    expect(stories[4].children[1].to_s).to match(/^1 min$/)
   end
 end

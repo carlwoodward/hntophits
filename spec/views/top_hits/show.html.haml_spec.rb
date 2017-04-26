@@ -17,11 +17,11 @@ RSpec.describe "top_hits/index.html.haml", type: :view do
 
     render
 
-    top_hits = assert_select(".table tr td")
-    expect(top_hits.length).to be 6
+    top_hits = assert_select(".stories p")
+    expect(top_hits.length).to be 3
     expect(top_hits[0].children[1].to_s).to match(/^1 min ago$/)
-    expect(top_hits[2].children[1].to_s).to match(/^2 mins ago$/)
-    expect(top_hits[4].children[1].to_s).to match(/^3 mins ago$/)
+    expect(top_hits[1].children[1].to_s).to match(/^2 mins ago$/)
+    expect(top_hits[2].children[1].to_s).to match(/^3 mins ago$/)
 
   end
 end

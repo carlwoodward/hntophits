@@ -12,10 +12,10 @@ RSpec.describe "stories/index.html.haml", type: :view do
 
     render
 
-    stories = assert_select(".table tr td") 
-    expect(stories.length).to be 6
+    stories = assert_select(".stories p") 
+    expect(stories.length).to be 3
     expect(stories[0].children[1].to_s).to match(/^2 mins$/)
+    expect(stories[1].children[1].to_s).to match(/^1 min$/)
     expect(stories[2].children[1].to_s).to match(/^1 min$/)
-    expect(stories[4].children[1].to_s).to match(/^1 min$/)
   end
 end
