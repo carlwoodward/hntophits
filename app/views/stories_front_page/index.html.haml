@@ -3,7 +3,7 @@
     .col-md-6
       .stories
         %h2
-          = link_to 'Recent Top Hits', url_for(top_hits_path)
+          = link_to 'Top Stories', url_for(top_hits_path)
         - @top_hits.each do |tophit|
           = render partial: 'stories/tophit', locals: { tophit: tophit }
   .loved_stories
@@ -13,7 +13,7 @@
           %ul.list-inline
             %li
               %h2
-                = link_to 'Time spent at #1', url_for(stories_path)
+                = link_to 'Trending Stories', url_for(stories_path)
             %li.pull-right.time-frame
               %ul.list-inline
                 %li.h5{class: ('underlined' if !params.has_key?(:time_frame) || params[:time_frame] == 'week')}

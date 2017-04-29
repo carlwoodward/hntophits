@@ -16,14 +16,15 @@
     .container
       .jumbotron
         .row
-          .col-md-8
+          .col-md-6
             %h1
               = link_to 'Hacker News Top Hits', controller: :stories_front_page
-          .col-md-4
-            %ul.what-is-info
+          .col-md-6
+            %ul.what-is-info.list-inline
               %li
-                Collecting stories since July 10 '15
+                Started July 10 '15
               %li
-                %a(href='https://github.com/brucewoodward/hntophits') Top Hits Source code.
-            = render partial: 'search_stories/form'
+                %a(href='https://github.com/brucewoodward/hntophits') Source code
+              %li
+                = render partial: 'search_stories/form'
       = yield

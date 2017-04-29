@@ -21,6 +21,7 @@
 body {
   background: #e9ebee;
   padding: 12px 1em 0;
+  font-size: 12px;
 }
 
 .container {
@@ -39,7 +40,7 @@ body {
 .jumbotron {
   font-family: Verdana, Geneva, sans-serif;
   padding-left: 9px;
-  padding-top: 9px;
+  padding-top: 4px;
   padding-bottom: 9px;
   margin-top: 0;
   margin-bottom: 0;
@@ -61,18 +62,17 @@ body {
   }
   a:hover {
     text-decoration: none;
-    color: $gray-base;
+    color: #fff;
   }
   a:active {
     text-decoration: none;
-    color: $gray-base;
+    color: #fff;
   }
 }
 
 .what-is-info {
   width: 100%;
   color: #FFF0E0;
-  padding-top: 8px;
   margin-bottom: 0;
   a:link {
     text-decoration: none;
