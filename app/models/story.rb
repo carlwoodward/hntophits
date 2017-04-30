@@ -12,7 +12,7 @@ class Story < ApplicationRecord
   scope :last_seen, -> { order(updated_at: :desc) }
   scope :most_time_at_number_one, -> { order(time_at_num_one: :desc) }
 
-  scope :by_most_time, -> { order(time_at_num_one: :desc).limit(10) }
+  scope :by_most_time, -> { order(time_at_num_one: :desc).limit(15) }
   scope :newer_than_days, ->(days) { where('updated_at > ?', days).by_most_time }
   scope :last_week, -> { newer_than_days(1.week.ago) }
   scope :last_month, -> { newer_than_days(1.month.ago) }
