@@ -67,6 +67,7 @@ group :test do
   gem 'database_cleaner'
   gem "simplecov"
   gem 'rails-controller-testing'
+  gem "selenium-webdriver"
 end
 
 gem 'unicorn'
