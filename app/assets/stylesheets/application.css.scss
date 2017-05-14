@@ -103,3 +103,29 @@ input[type=text] {
 .search-box {
   margin-top: 10px;
 }
+
+input[type=search] {
+  background-color: #324b81;
+  border: 1px;
+  border-radius: 5px;
+  border-style: solid;
+  padding: 5px;
+  color: white;
+}
+
+input[type="search"]::-webkit-input-placeholder {
+  color: white !important;
+}
+ 
+input[type="search"]:-moz-placeholder { /* Firefox 18- */
+  color: white !important;  
+}
+ 
+input[type="search"]::-moz-placeholder {  /* Firefox 19+ */
+  color: white !important;  
+}
+ 
+input[type="search"]:-ms-input-placeholder {  
+  color: white !important; 
+}
+

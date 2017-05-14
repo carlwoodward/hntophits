@@ -22,9 +22,7 @@
           .col-md-6
             %ul.what-is-info.list-inline
               %li
-                Started July 10 '15
+                = render partial: 'search_stories/form'
               %li
                 %a(href='https://github.com/brucewoodward/hntophits') Source code
-              %li
-                = render partial: 'search_stories/form'
       = yield
