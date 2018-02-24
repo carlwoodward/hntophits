@@ -2,5 +2,5 @@
   %span.story-link
     %a(href="#{story.href}" target='_blank') #{story.description}
   %span.story-duration
-    %a(href="#{build_hacker_news_href(story.hn_id)}") 
+    %a(href="#{build_hacker_news_href(story.hn_id)}" target='_blank') 
       = "(#{minutes_to_words(story.time_at_num_one) + (past_tense ? ' ago' : '')} @ #1)"
