@@ -52,12 +52,12 @@ end
 # gem 'debugger', group: [:development, :test]
 
 # local
-gem 'nokogiri'
+gem 'nokogiri', '>= 1.8.5'
 gem 'pg'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.5'
-  gem 'factory_girl_rails', '~> 4'
+  gem 'factory_bot_rails'
   gem 'capybara'
   #gem 'pry-rails'
   #gem 'pry-doc'

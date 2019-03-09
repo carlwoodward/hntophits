@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -16,24 +15,22 @@ ActiveRecord::Schema.define(version: 20160704015854) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "stories", force: true do |t|
+  create_table "stories", force: :cascade do |t|
     t.integer  "hn_id"
     t.text     "href"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "time_at_num_one", default: 1
+    t.index ["hn_id"], name: "index_stories_on_hn_id", using: :btree
   end
 
-  add_index "stories", ["hn_id"], name: "index_stories_on_hn_id", using: :btree
-
-  create_table "top_hits", force: true do |t|
+  create_table "top_hits", force: :cascade do |t|
     t.integer  "story_id"
     t.datetime "date_seen"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["story_id"], name: "index_top_hits_on_story_id", using: :btree
   end
-
-  add_index "top_hits", ["story_id"], name: "index_top_hits_on_story_id", using: :btree
 
 end
