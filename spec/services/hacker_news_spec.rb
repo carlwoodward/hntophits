@@ -1,4 +1,5 @@
 
+
 require 'rails_helper'
 
 RSpec.describe HackerNews do
@@ -61,6 +62,17 @@ RSpec.describe HackerNews do
       }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
+  end
+
+  context "Type of date_seen in SearchStory" do
+    it "should return a value without throwing an exception" do
+      # for this test, the value returned isn't a concern. Rather we are concerned that 
+      # an exception isn't thrown due to the object being sent being unable to respond
+      # to arthimetic.
+      story = create(:story, description: "python")
+      create(:top_hit, story: story, date_seen: Time.now)
+      expect(SearchStory.search_description("python").first.description).to eq story.description
+    end
   end
 
 end
