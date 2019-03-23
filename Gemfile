@@ -70,6 +70,8 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem 'unicorn'
+gem 'unicorn', '= 5.1.0'
 gem 'date_validator'
 gem 'active_type'
+
+gem 'mini_racer'
