@@ -14,6 +14,8 @@ class SearchStoriesController < ApplicationController
     @order_column_name = params.require(:order_column_name)
     @order_direction = params.require(:order_direction)
     sanitise_search_string
+  rescue ActionController::ParameterMissing => e
+    redirect_to "/"
   end
 
   def sanitise_search_string
