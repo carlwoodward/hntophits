@@ -2,11 +2,11 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.6'
-gem 'actionview', '>= 5.1.6.2'
+gem 'rails', '~> 5.1.7'
+gem 'actionview', '~> 5.1.7'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
-gem 'puma', '~> 3.0'
+gem "puma", ">= 3.12.4"
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -30,7 +30,9 @@ gem 'kaminari'
 gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
 
-gem "haml-rails", "~> 0.9"
+gem 'haml-rails', '~> 2.0'
+gem "haml", ">= 5.0.0"
+gem "rubyzip", ">= 1.3.0"
 
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 group :development do
@@ -53,7 +55,7 @@ end
 # gem 'debugger', group: [:development, :test]
 
 # local
-gem 'nokogiri', '>= 1.8.5'
+gem 'nokogiri', '>= 1.10.8'
 gem 'pg'
 
 group :development, :test do

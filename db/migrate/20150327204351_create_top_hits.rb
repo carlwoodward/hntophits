@@ -1,4 +1,4 @@
-class CreateTopHits < ActiveRecord::Migration
+class CreateTopHits < ActiveRecord::Migration[4.2]
   def change
     create_table :top_hits do |t|
       t.integer :story_id

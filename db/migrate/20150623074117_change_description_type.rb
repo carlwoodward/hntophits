@@ -1,4 +1,4 @@
-class ChangeDescriptionType < ActiveRecord::Migration
+class ChangeDescriptionType < ActiveRecord::Migration[4.2]
   def change
     change_column :stories, :description, :text
   end
