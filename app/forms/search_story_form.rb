@@ -28,7 +28,7 @@ class SearchStoryForm < ActiveType::Object
   private
 
   def set_defaults
-    toggle_direction
+    self.order_direction ||= 'desc'
     self.order_column_name ||= 'time_at_num_one'
     self.search_string ||= ""
   end
